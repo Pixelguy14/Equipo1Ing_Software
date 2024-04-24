@@ -106,12 +106,17 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'Inspire',
           to: '/inspire'
+        },
+        { // Aqui añadir los iconos para las diferentes pestañas!
+          icon: 'mdi-car-info',
+          title: 'reg_vehiculo',
+          to: '/reg_vehiculo'
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'Raites DICIS'
     }
   }
 }
