@@ -111,6 +111,11 @@ export default {
           icon: 'mdi-car-info',
           title: 'reg_vehiculo',
           to: '/reg_vehiculo'
+        },
+        {
+          icon: 'mdi-card-account-details-outline',
+          title: 'Registro_conductor',
+          to: '/reg_usuario'
         }
       ],
       miniVariant: false,
