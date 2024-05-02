@@ -1,11 +1,11 @@
 <template>
   <v-row class="d-flex justify-center">
-    <v-card class="pa-6 rounded-xxl my-5 " max-width="800">
+    <v-card class="my-5 rounded-xxl pa-5" elevation="16">
       <v-card-title class="headline d-flex justify-center">
         Registrate
       </v-card-title>
-      <v-sheet class="mx-auto" width="300">
-        <v-form fast-fail @submit.prevent>
+      <v-sheet class="mx-auto" width="400">
+        <v-form fast-fail class="mx-5" @submit.prevent>
           <v-text-field
             v-model="email"
             type="email"
@@ -62,7 +62,7 @@
             </v-col>
           </v-row>
 
-          <v-btn class="mt-2" type="submit" block>
+          <v-btn class="mt-2" type="submit" style="background-color: black; color: white;" elevation="10" block>
             Continuar
           </v-btn>
         </v-form>

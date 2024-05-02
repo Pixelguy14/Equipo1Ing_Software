@@ -243,6 +243,11 @@ export default {
       // Redirigir a la página de inicio de sesión
       this.$router.push('/')
     }
+  },
+  methods: {
+    toggleDarkTheme () {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+    }
   }
 }
 </script>
