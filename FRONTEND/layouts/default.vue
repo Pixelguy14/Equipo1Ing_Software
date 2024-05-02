@@ -81,8 +81,8 @@ export default {
         },
         {
           icon: 'mdi-card-account-details-outline',
-          title: 'Registrar usuario',
-          to: '/principal/reg_usuario/'
+          title: 'Registrar conductor',
+          to: '/principal/reg_conductor/'
         }
       ],
       miniVariant: false,
