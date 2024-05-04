@@ -6,7 +6,7 @@ const dbconfig = {
     port: config.mysql.host.split(':')[1], // Agregar el puerto
     user: config.mysql.user,
     password: config.mysql.password,
-    database: config.mysql.database
+    database: config.mysql.database,
 }
 
 let conexion;
@@ -34,7 +34,7 @@ function conMysql() {
 
 conMysql();
 
-function todos_usuarios(tabla) {
+function todos_tabla(tabla) {//logica general!
     return new Promise((resolve, reject) =>{
         conexion.query(`SELECT * FROM ${tabla}`, (error,result)=>{
             if(error) return reject(error);
@@ -43,22 +43,22 @@ function todos_usuarios(tabla) {
     })
 }
 
-function uno(tabla, id) {
+function un_tabla(tabla, id) {
     // Lógica para obtener un registro de la tabla por ID
 }
 
-function agregar(tabla, data) {
+function agregar_a_tabla(tabla, data) {
     // Lógica para agregar un nuevo registro a la tabla
 }
 
-function eliminar(tabla, id) {
+function eliminar_de_tabla(tabla, id) {
     // Lógica para eliminar un registro de la tabla por ID
 }
 
 module.exports = {
-    todos_usuarios,
-    uno,
-    agregar,
-    eliminar
+    todos_tabla,
+    un_tabla,
+    agregar_a_tabla,
+    eliminar_de_tabla,
 }
 
