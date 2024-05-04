@@ -41,6 +41,15 @@
               </p>
               <p>
                 <v-select
+                  v-model="userInput4"
+                  :items="Fabricantes"
+                  label="Fabricante del vehículo"
+                  placeholder="Selecciona un fabricante"
+                />
+              </p>
+              <!--<p>{{ userInput4 }}</p>-->
+              <p>
+                <v-select
                   v-model="userInput5"
                   :items="Modelos"
                   label="Modelo del vehículo"
@@ -61,8 +70,8 @@
                   v-model="userInput7"
                   type="text"
                   :rules="necesario"
-                  maxlength="20"
-                  label="Placas del Vehiculo"
+                  maxlength="100"
+                  label="Dirección del Conductor"
                 />
               </p>
               <p>
@@ -71,7 +80,25 @@
                   type="text"
                   :rules="necesario"
                   maxlength="6"
-                  label="NUA del Conductor (preeliminar)"
+                  label="Código Postal del Conductor"
+                />
+              </p>
+              <p>
+                <v-text-field
+                  v-model="userInput9"
+                  type="text"
+                  :rules="necesario"
+                  maxlength="50"
+                  placeholder="Ciudad del Conductor"
+                />
+              </p>
+              <p>
+                <v-text-field
+                  v-model="userInput10"
+                  type="tel"
+                  :rules="necesario"
+                  maxlength="10"
+                  placeholder="Número de Telefono del Conductor"
                 />
               </p>
             </v-card-text>
@@ -79,6 +106,46 @@
           <v-col>
             <v-card-text>
               <!--Columna2-->
+              <p style="font-size:10">
+                Subir Tarjeta de Circulación
+              </p>
+              <p>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  @change="subirCirculacion"
+                >
+              </p>
+              <p style="font-size:10">
+                Subir Poliza de Seguro Vigente
+              </p>
+              <p>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  @change="subirPoliza"
+                >
+              </p>
+              <p style="font-size:10">
+                Subir Licencia de Conducir
+              </p>
+              <p>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  @change="subirLicencia"
+                >
+              </p>
+              <p style="font-size:10">
+                Subir Comprobante de Domicilio
+              </p>
+              <p>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  @change="subirDomicilio"
+                >
+              </p>
               <v-card-actions>
                 <v-spacer />
                 <v-btn
@@ -109,17 +176,23 @@ export default {
 
           return 'Rellena el campo obligatorio.'
         }
-      ], // id, nua, modelo, año, placas, capacidad, color
+      ],
       userInput1: '', // Inicialmente vacío //Año de creacion del vehiculo
       userInput2: '', // ID del vehiculo
       userInput3: '', // Capacidad Maxima del vehiculo
+      userInput4: '', // Opción seleccionada //Fabricante del vehiculo
+      Fabricantes: [ // Lista de fabricantes
+        'Acura', 'Alfa-Romeo', 'Aston Martin', 'Audi', 'BMW', 'Bentley', 'Buick', 'Cadilac', 'Chevrolet', 'Chrysler', 'Daewoo', 'Daihatsu', 'Dodge', 'Eagle', 'Ferrari', 'Fiat', 'Fisker', 'Ford', 'Freighliner', 'GMC - General Motors Company', 'Genesis', 'Geo', 'Honda', 'Hummer', 'Hyundai', 'Infinity', 'Isuzu', 'Jaguar', 'Jeep', 'Kla', 'Lamborghini', 'Land Rover', 'Lexus', 'Lincoln', 'Lotus', 'Mazda', 'Maserati', 'Maybach', 'McLaren', 'Mercedez-Benz', 'Mercury', 'Mini', 'Mitsubishi', 'Nissan', 'Oldsmobile', 'Panoz', 'Plymouth', 'Polestar', 'Pontiac', 'Porsche', 'Ram', 'Rivian', 'Rolls_Royce', 'Saab', 'Saturn', 'Smart', 'Subaru', 'Susuki', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'
+      ],
       userInput5: '', // Modelo del vehiculo
       Modelos: [// Lista de modelos
         'SUV', 'Sedan', 'Coupe', 'Convertible', 'Hatchback', 'Pickup', 'Van', 'Minivan', 'Wagon'
       ],
       userInput6: '', // Color del vehiculo
-      userInput7: '', // PLACAS
-      userInput8: '' // NUA (Preeliminar)
+      userInput7: '', // Direccion del Conductor del vehiculo
+      userInput8: '', // Codigo Postal del Conductor del vehiculo
+      userInput9: '', // Ciudad del Conductor del vehiculo
+      userInput10: '' // Numero de Telefono del Conductor del vehiculo
     }
   },
   methods: {
@@ -130,6 +203,34 @@ export default {
       }
       return `Ingresa un número entre ${min} y ${max}`
     },
+    subirCirculacion (event) {
+      const archivo = event.target.files[0]
+      if (archivo) {
+        // Aquí puedes manejar el archivo cargado
+        // console.log(`Archivo cargado: ${archivo.name}`)
+      }
+    },
+    subirPoliza (event) {
+      const archivo = event.target.files[0]
+      if (archivo) {
+        // Aquí puedes manejar el archivo cargado
+        // console.log(`Archivo cargado: ${archivo.name}`)
+      }
+    },
+    subirLicencia (event) {
+      const archivo = event.target.files[0]
+      if (archivo) {
+        // Aquí puedes manejar el archivo cargado
+        // console.log(`Archivo cargado: ${archivo.name}`)
+      }
+    },
+    subirDomicilio (event) {
+      const archivo = event.target.files[0]
+      if (archivo) {
+        // Aquí puedes manejar el archivo cargado
+        // console.log(`Archivo cargado: ${archivo.name}`)
+      }
+    },
     async crearVehiculo () {
       try {
         await axios.post('http://localhost:4000/vehiculos', {
@@ -139,18 +240,12 @@ export default {
           Car_Placas: this.Car_Placas,
           Car_Capacidad: this.Car_Capacidad,
           Car_Color: this.Car_Color */
-          Car_Usu_NUA: this.userInput8,
-          Car_Modelo: this.userInput5,
-          Car_anio: this.userInput1,
-          Car_Placas: this.userInput7,
-          Car_Capacidad: this.userInput3,
-          Car_Color: this.userInput6
-          /* Car_Usu_NUA: '148114',
+          Car_Usu_NUA: '148114',
           Car_Modelo: 'Venture',
           Car_anio: '2019',
           Car_Placas: '45512',
           Car_Capacidad: '5',
-          Car_Color: 'Morado' */
+          Car_Color: 'Morado'
         })
         /* (this.Car_Usu_NUA = ''), (this.Car_Modelo = ''), (this.Car_anio = ''),
         (this.Car_Placas = ''), (this.Car_Capacidad = ''), (this.Car_Color = '') */
