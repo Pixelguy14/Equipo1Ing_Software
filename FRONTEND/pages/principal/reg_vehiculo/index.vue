@@ -1,188 +1,111 @@
 <template>
   <!--<h1>Pagina del registro del vehiculo</h1>-->
-  <v-row justify="end" align="center">
+  <v-row class="d-flex justify-center">
     <v-col cols="12" sm="8" md="20">
-      <!--<v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>-->
-      <v-card>
-        <v-card-title class="headline">
+      <v-card class="pa-6 rounded-xxl my-5 " max-width="800">
+        <v-card-title class="headline d-flex justify-center">
           Registrar un Vehiculo
         </v-card-title>
         <v-row>
           <v-col>
             <v-card-text>
-              Columna1
-              <transition name="fade">
-                <p v-show="userInput1" class="fadeintext">
-                  Año de creación del vehiculo
-                </p>
-              </transition>
+              <!--Columna1-->
               <p>
-                <input
+                <v-text-field
                   v-model="userInput1"
                   type="number"
-                  size="30px"
-                  placeholder="Año de creación del vehiculo"
+                  :rules="[() => validarRango(userInput1, 1990, 2025)]"
+                  label="Año de creación del vehiculo"
                   min="1990"
                   max="2025"
-                  style="color: white;"
-                >
+                />
               </p>
-              <transition name="fade">
-                <p v-show="userInput2" class="fadeintext">
-                  Número de identificación del vehiculo
-                </p>
-              </transition>
               <p>
-                <input
+                <v-text-field
                   v-model="userInput2"
                   type="text"
-                  size="30px"
+                  :rules="necesario"
                   maxlength="17"
-                  placeholder="Número de identificación del vehiculo"
-                  style="color: white;"
-                >
+                  label="Número de identificación del vehiculo"
+                />
               </p>
-              <transition name="fade">
-                <p v-show="userInput3" class="fadeintext">
-                  Capacidad máxima del vehiculo
-                </p>
-              </transition>
               <p>
-                <input
+                <v-text-field
                   v-model="userInput3"
                   type="number"
-                  size="30px"
-                  placeholder="Capacidad máxima del vehiculo"
+                  :rules="[() => validarRango(userInput3, 2, 9)]"
+                  label="Capacidad máxima del vehiculo"
                   min="2"
                   max="9"
-                  style="color: white;"
-                >
+                />
               </p>
-              <transition name="fade">
-                <p v-show="userInput4" class="fadeintext">
-                  Fabricante del vehiculo
-                </p>
-              </transition>
               <p>
-                <select v-model="userInput4">
-                  <option v-if="!userInput4" disabled value="">
-                    Fabricante del vehiculo
-                  </option>
-                  <option
-                    v-for="option in Fabricantes"
-                    :key="option"
-                    :value="option"
-                    :style="{ color: userInput4 === option ? 'gold' : 'black' }"
-                  >
-                    {{ option }}
-                  </option>
-                </select>
-                <!--<p>{{ userInput4 }}</p>-->
+                <v-select
+                  v-model="userInput4"
+                  :items="Fabricantes"
+                  label="Fabricante del vehículo"
+                  placeholder="Selecciona un fabricante"
+                />
               </p>
-              <transition name="fade">
-                <p v-show="userInput5" class="fadeintext">
-                  Modelo del vehiculo
-                </p>
-              </transition>
+              <!--<p>{{ userInput4 }}</p>-->
               <p>
-                <select v-model="userInput5">
-                  <option v-if="!userInput5" disabled value="">
-                    Modelo del vehiculo
-                  </option>
-                  <option
-                    v-for="option in Modelos"
-                    :key="option"
-                    :value="option"
-                    :style="{ color: userInput5 === option ? 'gold' : 'black' }"
-                  >
-                    {{ option }}
-                  </option>
-                </select>
-                <!--<p>{{ userInput4 }}</p>-->
+                <v-select
+                  v-model="userInput5"
+                  :items="Modelos"
+                  label="Modelo del vehículo"
+                  placeholder="Selecciona un modelo"
+                />
               </p>
-              <transition name="fade">
-                <p v-show="userInput6" class="fadeintext">
-                  Color del vehiculo
-                </p>
-              </transition>
               <p>
-                <input
+                <v-text-field
                   v-model="userInput6"
                   type="text"
-                  size="30px"
+                  :rules="necesario"
                   maxlength="30"
-                  placeholder="Color del Vehiculo"
-                  style="color: white;"
-                >
+                  label="Color del Vehiculo"
+                />
               </p>
-              <transition name="fade">
-                <p v-show="userInput7" class="fadeintext">
-                  Dirección del Conductor
-                </p>
-              </transition>
               <p>
-                <input
+                <v-text-field
                   v-model="userInput7"
                   type="text"
-                  size="30px"
-                  maxlength="30"
-                  placeholder="Dirección del Conductor"
-                  style="color: white;"
-                >
+                  :rules="necesario"
+                  maxlength="100"
+                  label="Dirección del Conductor"
+                />
               </p>
-              <transition name="fade">
-                <p v-show="userInput8" class="fadeintext">
-                  Código Postal del Conductor
-                </p>
-              </transition>
               <p>
-                <input
+                <v-text-field
                   v-model="userInput8"
                   type="text"
-                  size="30px"
-                  maxlength="30"
-                  placeholder="Código Postal del Conductor"
-                  style="color: white;"
-                >
+                  :rules="necesario"
+                  maxlength="6"
+                  label="Código Postal del Conductor"
+                />
               </p>
-              <transition name="fade">
-                <p v-show="userInput9" class="fadeintext">
-                  Ciudad del Conductor
-                </p>
-              </transition>
               <p>
-                <input
+                <v-text-field
                   v-model="userInput9"
                   type="text"
-                  size="30px"
-                  maxlength="30"
+                  :rules="necesario"
+                  maxlength="50"
                   placeholder="Ciudad del Conductor"
-                  style="color: white;"
-                >
+                />
               </p>
-              <transition name="fade">
-                <p v-show="userInput10" class="fadeintext">
-                  Número de Telefono del Conductor
-                </p>
-              </transition>
               <p>
-                <input
+                <v-text-field
                   v-model="userInput10"
                   type="tel"
-                  size="30px"
-                  maxlength="30"
+                  :rules="necesario"
+                  maxlength="10"
                   placeholder="Número de Telefono del Conductor"
-                  style="color: white;"
-                >
+                />
               </p>
             </v-card-text>
           </v-col>
           <v-col>
             <v-card-text>
-              Columna2
+              <!--Columna2-->
               <p style="font-size:10">
                 Subir Tarjeta de Circulación
               </p>
@@ -228,7 +151,7 @@
                 <v-btn
                   color="primary"
                   nuxt
-                  to="/"
+                  to="/principal"
                 >
                   Confirmar Registro
                 </v-btn>
@@ -245,6 +168,13 @@
 export default {
   data () {
     return {
+      necesario: [
+        (value) => {
+          if (value?.length > 0) { return true }
+
+          return 'Rellena el campo obligatorio.'
+        }
+      ],
       userInput1: '', // Inicialmente vacío
       userInput2: '',
       userInput3: '',
@@ -264,6 +194,13 @@ export default {
     }
   },
   methods: {
+    validarRango (value, min, max) {
+      const intValue = parseInt(value)
+      if (intValue >= min && intValue <= max) {
+        return true
+      }
+      return `Ingresa un número entre ${min} y ${max}`
+    },
     subirCirculacion (event) {
       const archivo = event.target.files[0]
       if (archivo) {
@@ -296,18 +233,3 @@ export default {
 }
 
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 1s;
-}
-.fade-enter,
-.fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0;
-  transition: opacity 0.5s;
-}
-.fadeintext{
-    font-size: 10px;
-}
-</style>
