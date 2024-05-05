@@ -34,7 +34,7 @@ function conMysql() {
 
 conMysql();
 
-function todos_usuarios(tabla) {
+function todos(tabla) {
     return new Promise((resolve, reject) =>{
         conexion.query(`SELECT * FROM ${tabla}`, (error,result)=>{
             if(error) return reject(error);
@@ -43,22 +43,40 @@ function todos_usuarios(tabla) {
     })
 }
 
-function uno(tabla, id) {
-    // Lógica para obtener un registro de la tabla por ID
-}
+function uno(tabla, Usu_NUA) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`SELECT * FROM ${tabla} WHERE Usu_NUA=${Usu_NUA}`, (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })}
 
+    function actualizar(tabla, data) {
+        return new Promise((resolve, reject) =>{
+            conexion.query(`UPDATE ${tabla} SET ? WHERE Usu_NUA = ?`,[data ,data.Usu_NUA] , (error,result)=>{
+                return error ? reject(error) : resolve(result);
+            })
+        })
+    }
 function agregar(tabla, data) {
-    // Lógica para agregar un nuevo registro a la tabla
-}
+    return new Promise((resolve, reject) =>{
+        conexion.query(`INSERT INTO ${tabla} SET ?`, data , (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })
+    }
 
-function eliminar(tabla, id) {
-    // Lógica para eliminar un registro de la tabla por ID
-}
+function eliminar(tabla, data) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`DELETE FROM ${tabla} WHERE Usu_NUA = ?`, data.Usu_NUA , (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })}
 
 module.exports = {
-    todos_usuarios,
+    todos,
     uno,
     agregar,
-    eliminar
+    eliminar,
+    actualizar
 }
 
