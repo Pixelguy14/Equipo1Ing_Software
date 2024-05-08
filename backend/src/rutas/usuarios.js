@@ -6,7 +6,7 @@ const controlador = require('../controlador/controlador');
 const router= express.Router()
 
 router.get('/',todos_usuarios);
-router.get('/:id', uno);
+router.get('/:Usu_NUA', uno);
 router.delete('/',eliminar);
 router.post('/',agregar);
 router.put('/',actualizar);
@@ -17,7 +17,6 @@ async function todos_usuarios (req,res,next){
         respuestas.success(req, res, items, 200)
     } catch (err) {
         next(err);
-
     }
 }
 
@@ -39,17 +38,18 @@ async function agregar (req,res,next){
         const items= await controlador.agregar('usuarios',req.body); 
         respuestas.success(req, res, 'Agregado satisfactoriamente', 200)
     } catch (err) {
-       next(err);
+        next(err);
     }
     
 }
+
 async function actualizar (req,res,next){
 
     try {
         const items= await controlador.actualizar('usuarios',req.body); 
         respuestas.success(req, res, 'Actualizado con exito', 200)
     } catch (err) {
-       next(err);
+        next(err);
     }
     
 }

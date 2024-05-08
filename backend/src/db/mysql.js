@@ -50,13 +50,14 @@ function uno(tabla, Usu_NUA) {
         })
     })}
 
-    function actualizar(tabla, data) {
+function actualizar(tabla, data) {
         return new Promise((resolve, reject) =>{
             conexion.query(`UPDATE ${tabla} SET ? WHERE Usu_NUA = ?`,[data ,data.Usu_NUA] , (error,result)=>{
                 return error ? reject(error) : resolve(result);
             })
         })
     }
+
 function agregar(tabla, data) {
     return new Promise((resolve, reject) =>{
         conexion.query(`INSERT INTO ${tabla} SET ?`, data , (error,result)=>{
@@ -72,11 +73,19 @@ function eliminar(tabla, data) {
         })
     })}
 
+function un_Usuario_Calificacion (tabla, Cal_Califica_Usu_NUA) {
+        return new Promise((resolve, reject) =>{
+            conexion.query(`SELECT * FROM ${tabla} WHERE Cal_Califica_Usu_NUA=${Cal_Califica_Usu_NUA}`, (error,result)=>{
+                return error ? reject(error) : resolve(result);
+            })
+        })}
+
 module.exports = {
     todos,
     uno,
     agregar,
     eliminar,
-    actualizar
+    actualizar,
+    un_Usuario_Calificacion
 }
 
