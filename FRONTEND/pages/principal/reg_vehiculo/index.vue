@@ -152,6 +152,7 @@ export default {
         (this.car_placas = ''), (this.car_capacidad = ''), (this.car_color = '') */
         this.$router.push('/principal') // redireccionamiento
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err)
       }
     }

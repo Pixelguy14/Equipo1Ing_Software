@@ -1,7 +1,7 @@
 const express =  require('express');
 const cors = require('cors');
 const morgan = require('morgan')
-const config= require('./config')
+const config = require('./config')
 
 const usuarios = require('./rutas/usuarios')
 const calificaciones = require ('./rutas/calificaciones')

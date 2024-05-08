@@ -79,6 +79,7 @@ export default {
           }) // redireccionamiento con el NUA de la cuenta iniciada
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Error al iniciar sesión:', error)
       }
     },
