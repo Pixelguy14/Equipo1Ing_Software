@@ -8,7 +8,7 @@ module.exports = {
     mysql: {
         host: process.env.MYSQL_HOST || 'localhost:4000',
         user: process.env.MYSQL_USER || 'root',
-        password: process.env.MYSQL_PASSWORD || 'root',
+        password: process.env.MYSQL_PASSWORD || '1234',
         database: process.env.MYSQL_DB || 'raites'
     }
 }

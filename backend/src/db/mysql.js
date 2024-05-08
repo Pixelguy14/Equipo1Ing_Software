@@ -3,10 +3,10 @@ const config = require('../config');
 
 const dbconfig = {
     host: config.mysql.host.split(':')[0], // Dividir el host para quitar el puerto
-    port: config.mysql.host.split(':')[1], // Agregar el puerto
+    //port: config.mysql.host.split(':')[1], // Agregar el puerto
     user: config.mysql.user,
     password: config.mysql.password,
-    database: config.mysql.database
+    database: config.mysql.database,
 }
 
 let conexion;
@@ -34,7 +34,8 @@ function conMysql() {
 
 conMysql();
 
-function todos(tabla) {
+//Usuarios
+function todos_usuario(tabla) {
     return new Promise((resolve, reject) =>{
         conexion.query(`SELECT * FROM ${tabla}`, (error,result)=>{
             if(error) return reject(error);
@@ -42,41 +43,93 @@ function todos(tabla) {
         })
     })
 }
-
-function uno(tabla, Usu_NUA) {
+function un_usuario(tabla, Usu_NUA) {
     return new Promise((resolve, reject) =>{
-        conexion.query(`SELECT * FROM ${tabla} WHERE Usu_NUA=${Usu_NUA}`, (error,result)=>{
+        conexion.query(`SELECT * FROM ${tabla} WHERE Usu_NUA = ${Usu_NUA}`, (error,result)=>{
             return error ? reject(error) : resolve(result);
         })
-    })}
-
-    function actualizar(tabla, data) {
-        return new Promise((resolve, reject) =>{
-            conexion.query(`UPDATE ${tabla} SET ? WHERE Usu_NUA = ?`,[data ,data.Usu_NUA] , (error,result)=>{
-                return error ? reject(error) : resolve(result);
-            })
-        })
-    }
-function agregar(tabla, data) {
+    })
+}
+function agregar_usuario(tabla, data) {
     return new Promise((resolve, reject) =>{
         conexion.query(`INSERT INTO ${tabla} SET ?`, data , (error,result)=>{
             return error ? reject(error) : resolve(result);
         })
     })
-    }
-
-function eliminar(tabla, data) {
+    
+ }
+function actualizar_usuario(tabla, data, Usu_NUA) {
     return new Promise((resolve, reject) =>{
-        conexion.query(`DELETE FROM ${tabla} WHERE Usu_NUA = ?`, data.Usu_NUA , (error,result)=>{
+        conexion.query(`UPDATE ${tabla} SET ? WHERE Usu_NUA = ?`,[data, Usu_NUA] , (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })
+}
+function eliminar_usuario(tabla, Usu_NUA) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`DELETE FROM ${tabla} WHERE Usu_NUA = ${Usu_NUA}`, (error,result)=>{
             return error ? reject(error) : resolve(result);
         })
     })}
 
+//Vehiculos
+function todos_vehiculo(tabla) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`SELECT * FROM ${tabla}`, (error,result)=>{
+            if(error) return reject(error);
+            resolve(result);
+        })
+    })
+}
+function un_vehiculo(tabla, Car_id) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`SELECT * FROM ${tabla} WHERE Car_id = ${Car_id}`, (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })
+}
+function agregar_vehiculo(tabla, data) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`INSERT INTO ${tabla} SET ?`, data , (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })
+    
+ }
+function actualizar_vehiculo(tabla, data, Car_id) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`UPDATE ${tabla} SET  Car_Usu_NUA = ?, Car_Modelo = ?, Car_anio = ?, Car_Placas = ?, Car_Capacidad = ?, Car_Color = ? WHERE Car_id = ?`,
+        [data.Car_Usu_NUA, data.Car_Modelo, data.Car_anio, data.Car_Placas, data.Car_Capacidad,data.Car_Color, Car_id] , (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })
+}
+function eliminar_vehiculo(tabla, Car_id) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`DELETE FROM ${tabla} WHERE Car_id = ${Car_id}`, (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })}
+//inicio de sesion
+function iniciar_sesion(tabla, data) {
+    return new Promise((resolve, reject) => {
+        conexion.query(`SELECT * FROM ${tabla} WHERE Usu_Correo = ? AND Usu_Password = ?`, [data.Usu_Correo, data.Usu_Password], (error, result) => {
+            return error ? reject(error) : resolve(result);
+        })
+    })
+}
+
 module.exports = {
-    todos,
-    uno,
-    agregar,
-    eliminar,
-    actualizar
+    todos_usuario,
+    un_usuario,
+    agregar_usuario,
+    actualizar_usuario,
+    eliminar_usuario,
+    todos_vehiculo,
+    un_vehiculo,
+    agregar_vehiculo,
+    actualizar_vehiculo,
+    eliminar_vehiculo,
+    iniciar_sesion
 }
 

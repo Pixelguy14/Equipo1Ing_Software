@@ -5,65 +5,60 @@ const controlador = require('../controlador/controlador');
 
 const router= express.Router()
 
-router.get('/',todos_usuarios);
-router.get('/:id', uno);
-router.delete('/',eliminar);
-router.post('/',agregar);
-router.put('/',actualizar);
+router.get('/',todos_usuario);
+router.get('/:id', un_usuario);
+router.post('/',agregar_usuario);
+router.put('/:id',actualizar_usuario);
+router.delete('/:id',eliminar_usuario);
+router.post('/iniciar/',iniciar_sesion);
 
-async function todos_usuarios (req,res,next){
+async function todos_usuario (req,res,next){
     try {
-        const items= await controlador.todos('usuarios'); 
+        const items= await controlador.todos_usuario('usuarios'); 
         respuestas.success(req, res, items, 200)
     } catch (err) {
         next(err);
-
     }
 }
-
-async function uno (req,res,next){
-
+async function un_usuario (req,res,next){
     try {
-        const items= await controlador.uno('usuarios',req.params.Usu_NUA); 
+        const items= await controlador.un_usuario('usuarios',req.params.Usu_NUA); 
         respuestas.success(req, res, items, 200)
     } catch (err) {
         next(err);
-
-    }
-    
+    }   
 }
-
-async function agregar (req,res,next){
-
+async function agregar_usuario (req,res,next){
     try {
-        const items= await controlador.agregar('usuarios',req.body); 
-        respuestas.success(req, res, 'Agregado satisfactoriamente', 200)
+        const items= await controlador.agregar_usuario('usuarios',req.body); 
+        respuestas.success(req, res, items+' Agregado satisfactoriamente', 200)
     } catch (err) {
        next(err);
     }
-    
 }
-async function actualizar (req,res,next){
-
+async function actualizar_usuario (req,res,next){
     try {
-        const items= await controlador.actualizar('usuarios',req.body); 
-        respuestas.success(req, res, 'Actualizado con exito', 200)
+        const items= await controlador.actualizar_usuario('usuarios',req.body,req.params.id); 
+        respuestas.success(req, res, items+' Actualizado con exito', 200)
     } catch (err) {
        next(err);
     }
-    
 }
-
-async function eliminar (req,res,next){
-
+async function eliminar_usuario (req,res,next){
     try {
-        const items= await controlador.eliminar('usuarios',req.body); 
-        respuestas.success(req, res, 'eliminado satisfactoriamente', 200)
+        const items= await controlador.eliminar_usuario('usuarios',req.params.id); 
+        respuestas.success(req, res, items+' Eliminado satisfactoriamente', 200)
     } catch (err) {
-        respuestas.success(req, res, err, 500)
-
+        next(err);
     }
-    
 }
-
+//iniciar_sesion
+async function iniciar_sesion(req,res,next){
+    try {
+        const items= await controlador.iniciar_sesion('usuarios',req.body); 
+        respuestas.success(req, res, items, 200)
+    } catch (err) {
+        next(err);
+    }
+}
 module.exports=router;
