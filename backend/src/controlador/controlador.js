@@ -42,6 +42,12 @@ function eliminar_vehiculo(tabla,id){
 function iniciar_sesion(tabla,body){
     return db.iniciar_sesion(tabla,body)
 }
+
+function un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA){
+    console.log('@@@ datos =>', tabla, Cal_Califica_Usu_NUA)
+    return db.un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA)
+}
+
 module.exports = {
     todos_usuario,
     un_usuario,
@@ -54,5 +60,5 @@ module.exports = {
     actualizar_vehiculo,
     eliminar_vehiculo,
     iniciar_sesion,
+    un_Usuario_Calificacion
 }
-    

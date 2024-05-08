@@ -57,7 +57,7 @@ function agregar_usuario(tabla, data) {
         })
     })
     
- }
+}
 function actualizar_usuario(tabla, data, Usu_NUA) {
     return new Promise((resolve, reject) =>{
         conexion.query(`UPDATE ${tabla} SET ? WHERE Usu_NUA = ?`,[data, Usu_NUA] , (error,result)=>{
@@ -95,7 +95,7 @@ function agregar_vehiculo(tabla, data) {
         })
     })
     
- }
+}
 function actualizar_vehiculo(tabla, data, Car_id) {
     return new Promise((resolve, reject) =>{
         conexion.query(`UPDATE ${tabla} SET  Car_Usu_NUA = ?, Car_Modelo = ?, Car_anio = ?, Car_Placas = ?, Car_Capacidad = ?, Car_Color = ? WHERE Car_id = ?`,
@@ -119,6 +119,13 @@ function iniciar_sesion(tabla, data) {
     })
 }
 
+function un_Usuario_Calificacion (tabla, Cal_Califica_Usu_NUA) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`SELECT * FROM ${tabla} WHERE Cal_Califica_Usu_NUA=${Cal_Califica_Usu_NUA}`, (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })}
+
 module.exports = {
     todos_usuario,
     un_usuario,
@@ -130,6 +137,6 @@ module.exports = {
     agregar_vehiculo,
     actualizar_vehiculo,
     eliminar_vehiculo,
-    iniciar_sesion
+    iniciar_sesion,
+    un_Usuario_Calificacion
 }
-
