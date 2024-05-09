@@ -6,7 +6,7 @@ const controlador = require('../controlador/controlador');
 const router= express.Router()
 
 router.get('/',todos_usuario);
-router.get('/:id', un_usuario);
+router.get('/:Usu_NUA', un_usuario);
 router.post('/',agregar_usuario);
 router.put('/:id',actualizar_usuario);
 router.delete('/:id',eliminar_usuario);

@@ -1,12 +1,6 @@
 <template>
   <v-app app>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-      elevation="0"
-      color="black"
-    >
+    <v-app-bar :clipped-left="clipped" fixed app elevation="0" color="black">
       <v-toolbar-title style="color: white;" class="fuente">
         {{ title }}
       </v-toolbar-title>
@@ -21,6 +15,7 @@
         plain
         color="white"
         class="fuente"
+        @click="handleItemClick(item)"
       >
         {{ item.title }}
       </v-btn>
@@ -57,6 +52,21 @@
         mdi-lightbulb-outline
       </v-icon>
     </v-btn>
+    <v-row justify="center">
+      <v-dialog v-model="abrirHistorial" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <v-card>
+          <v-app-bar :clipped-left="clipped" fixed app elevation="0" color="black">
+            <v-btn icon dark @click="abrirHistorial = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title style="color: white;" class="fuente">
+              Historial
+            </v-toolbar-title>
+            <v-spacer />
+          </v-app-bar>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-app>
 </template>
 
@@ -70,30 +80,40 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-car-side',
           title: 'Menú Principal',
           to: '/principal/'
         },
         {
-          icon: 'mdi-car-info',
           title: 'Registrar Vehículo',
           to: '/principal/reg_vehiculo/'
         },
         {
-          icon: 'mdi-card-account-details-outline',
           title: 'Registrar usuario',
           to: '/principal/reg_usuario/'
+        },
+        {
+          title: 'Historial',
+          click: this.historialDialog
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Raites DICIS'
+      title: 'Raites DICIS',
+      abrirHistorial: false
     }
   },
   methods: {
     toggleDarkTheme () {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+    },
+    handleItemClick (item) {
+      if (item.title === 'Historial') {
+        this.historialDialog()
+      }
+    },
+    historialDialog () {
+      this.abrirHistorial = true
     }
   }
 }
