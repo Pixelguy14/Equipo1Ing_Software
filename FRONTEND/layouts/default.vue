@@ -1,3 +1,6 @@
+<!-- eslint-disable vue/no-lone-template -->
+<!-- eslint-disable no-console -->
+<!-- eslint-disable no-console -->
 <template>
   <v-app app>
     <v-app-bar :clipped-left="clipped" fixed app elevation="0" color="black">
@@ -64,6 +67,24 @@
             </v-toolbar-title>
             <v-spacer />
           </v-app-bar>
+          <v-data-table
+            able
+            elevation="0"
+            :headers="headers"
+            :items="historialItems"
+            :items-per-page="5"
+            hide-default-footer
+            style="margin: 50 auto; max-width: 100% !important;"
+          >
+            <template #top>
+              <v-toolbar flat />
+            </template>
+            <template #[`item.Cal_Calificacion`]="{ item }">
+              <v-icon v-for="(star, index) in getCalificationStars(item.Cal_Calificacion)" :key="index">
+                {{ star }}
+              </v-icon>
+            </template>
+          </v-data-table>
         </v-card>
       </v-dialog>
     </v-row>
@@ -71,6 +92,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'DefaultLayout',
   data () {
@@ -78,6 +101,14 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      headers: [
+        { text: 'Fecha', align: 'center', sortable: true, value: 'Via_Horario' },
+        { text: 'NUA', align: 'center', sortable: true, value: 'Cal_Califica_Usu_NUA' },
+        { text: 'Origen', align: 'center', sortable: true, value: 'Via_Origen' },
+        { text: 'Precio', align: 'center', sortable: true, value: 'Precio' },
+        { text: 'Calificación', align: 'center', sortable: false, value: 'Cal_Calificacion' }
+      ],
+      historialItems: [],
       items: [
         {
           title: 'Menú Principal',
@@ -93,7 +124,7 @@ export default {
         },
         {
           title: 'Historial',
-          click: this.historialDialog
+          action: this.historialDialog // Cambio aquí
         }
       ],
       miniVariant: false,
@@ -109,11 +140,47 @@ export default {
     },
     handleItemClick (item) {
       if (item.title === 'Historial') {
-        this.historialDialog()
+        this.fetchHistorialData() // Llamar a fetchHistorialData() antes de abrir el diálogo
+        this.abrirHistorial = true // Abrir el diálogo después de obtener los datos
       }
     },
+
     historialDialog () {
       this.abrirHistorial = true
+      this.fetchHistorialData()
+    },
+
+    async fetchHistorialData () {
+      const storedNUA = localStorage.getItem('NUA')
+
+      if (storedNUA) {
+        try {
+          this.NUA = storedNUA
+          const apiUrl = `http://localhost:4000/api/historial/${this.NUA}`
+          const response = await axios.get(apiUrl)
+          this.historialItems = response.data.body.map(item => ({
+            ...item,
+            Via_Horario: new Date(item.Via_Horario).toLocaleDateString()
+          }))
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Error al obtener datos del historial:', error)
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('No se pudo recuperar el NUA del almacenamiento local')
+      }
+    },
+
+    getCalificationStars (calification) {
+      const stars = []
+      for (let i = 0; i < calification; i++) {
+        stars.push('mdi-star')
+      }
+      for (let i = calification; i < 5; i++) {
+        stars.push('mdi-star-outline')
+      }
+      return stars
     }
   }
 }
