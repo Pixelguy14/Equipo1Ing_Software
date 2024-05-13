@@ -83,6 +83,11 @@ export default {
         // eslint-disable-next-line no-console
         console.error('Error al iniciar sesión:', error)
       }
+    },
+    crear_cuenta () {
+      this.$router.push({
+        path: '/principal/reg_usuario/'
+      }) // redireccionamiento con el NUA de la cuenta iniciada
     }
   }
 }
