@@ -92,6 +92,11 @@ export default {
           to: '/principal/reg_usuario/'
         },
         {
+          icon: 'mdi-car-info',
+          title: 'Busqueda de viajes',
+          to: '/principal/busqueda_raites/'
+        },
+        {
           title: 'Historial',
           click: this.historialDialog
         }

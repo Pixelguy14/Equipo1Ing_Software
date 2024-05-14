@@ -48,6 +48,10 @@ function un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA){
     return db.un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA)
 }
 
+function todos_los_viajes(tabla){
+    return db.todos_los_viajes(tabla)
+}
+
 module.exports = {
     todos_usuario,
     un_usuario,
@@ -60,5 +64,6 @@ module.exports = {
     actualizar_vehiculo,
     eliminar_vehiculo,
     iniciar_sesion,
-    un_Usuario_Calificacion
+    un_Usuario_Calificacion,
+    todos_los_viajes
 }

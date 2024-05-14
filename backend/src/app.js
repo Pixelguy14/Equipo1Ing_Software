@@ -6,6 +6,7 @@ const config = require('./config')
 const usuarios = require('./rutas/usuarios')
 const calificaciones = require ('./rutas/calificaciones')
 const vehiculos = require('./rutas/vehiculos')
+const viajes = require('./rutas/viajes')
 
 const app = express() 
 
@@ -23,5 +24,8 @@ app.use(express.urlencoded ({extended: true}));
 app.use('/api/usuarios', usuarios)
 app.use('/api/calificaciones', calificaciones)
 app.use('/api/vehiculos', vehiculos);
+
+//rutas para viajes
+app.use('/api/viajes', viajes);
 
 module.exports = app;

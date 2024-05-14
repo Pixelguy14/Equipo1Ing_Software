@@ -126,6 +126,16 @@ function un_Usuario_Calificacion (tabla, Cal_Califica_Usu_NUA) {
         })
     })}
 
+// ====================== Vieajes ======================
+function todos_los_viajes(tabla) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`SELECT * FROM ${tabla}`, (error,result)=>{
+            if(error) return reject(error);
+            resolve(result);
+        })
+    })
+}
+
 module.exports = {
     todos_usuario,
     un_usuario,
@@ -138,5 +148,6 @@ module.exports = {
     actualizar_vehiculo,
     eliminar_vehiculo,
     iniciar_sesion,
-    un_Usuario_Calificacion
+    un_Usuario_Calificacion,
+    todos_los_viajes
 }
