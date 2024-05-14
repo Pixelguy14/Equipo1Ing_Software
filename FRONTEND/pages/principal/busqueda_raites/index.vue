@@ -97,7 +97,7 @@
                     mdi-calendar-clock
                   </v-icon>
                   <v-text-subtitle id="hora-fecha-raite" style="color: white">
-                    {{ viaje.fecha }}
+                    {{ formatFecha(viaje.fecha) }}
                   </v-text-subtitle>
                 </v-col>
               </v-container>
@@ -130,9 +130,9 @@
         </v-container>
       </v-container>
       <!-- boton para pruebas -->
-      <v-btn @click="imprimirViajes">
+      <!-- <v-btn @click="imprimirViajes">
         Obtener raite
-      </v-btn>
+      </v-btn> -->
     </v-col>
     <!-- seccion de card anuncios =============================== -->
     <v-col cols="6">
@@ -194,6 +194,15 @@ export default {
         // eslint-disable-next-line no-console
         console.log(viaje)
       })
+    },
+    formatFecha (fecha) {
+      const date = new Date(fecha)
+      const day = ('0' + date.getDate()).slice(-2)
+      const month = ('0' + (date.getMonth() + 1)).slice(-2)
+      const year = date.getFullYear()
+      const hours = ('0' + date.getHours()).slice(-2)
+      const minutes = ('0' + date.getMinutes()).slice(-2)
+      return `${day}/${month}/${year} ${hours}:${minutes}`
     }
   }
 }
