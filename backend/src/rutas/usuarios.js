@@ -1,8 +1,8 @@
 const express = require('express');
-
 const respuestas= require('../red/respuestas')
 const controlador = require('../controlador/controlador');
-
+const authController = require('../controlador/authController');
+const jwtUtil = require('../utilidades/jwtUtil')
 const router= express.Router()
 
 router.get('/',todos_usuario);
@@ -10,16 +10,42 @@ router.get('/:id', un_usuario);
 router.post('/',agregar_usuario);
 router.put('/:id',actualizar_usuario);
 router.delete('/:id',eliminar_usuario);
-router.post('/iniciar/',iniciar_sesion);
+router.post('/login',iniciar_sesion);
 
 async function todos_usuario (req,res,next){
     try {
+        console.log('@@@ body ', req.body)
         const items= await controlador.todos_usuario('usuarios'); 
         respuestas.success(req, res, items, 200)
     } catch (err) {
         next(err);
     }
 }
+
+async function iniciar_sesion(req, res, next) {
+    const { Usu_NUA, Usu_Password} = req.body;
+
+    try {
+        const usuario = await authController.iniciar_sesion('usuarios', { Usu_NUA, Usu_Password });
+        
+        if (usuario.error) {
+            // Si la propiedad "error" está presente en el objeto retornado, significa que ocurrió un error al iniciar sesión.
+            return res.status(401).json({ mensaje: usuario.error });
+        }
+
+        if (!usuario) {
+            return res.status(401).json({ mensaje: 'Credenciales inválidas' });
+        }
+
+        const token = jwtUtil.generarToken(usuario);
+        console.log('token', token)
+        return res.status(200).json({ token });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ mensaje: 'Error en el servidor' });
+    }
+}
+
 async function un_usuario (req,res,next){
     try {
         const items= await controlador.un_usuario('usuarios',req.params.Usu_NUA); 
@@ -49,15 +75,6 @@ async function eliminar_usuario (req,res,next){
     try {
         const items= await controlador.eliminar_usuario('usuarios',req.params.id); 
         respuestas.success(req, res, items+' Eliminado satisfactoriamente', 200)
-    } catch (err) {
-        next(err);
-    }
-}
-//iniciar_sesion
-async function iniciar_sesion(req,res,next){
-    try {
-        const items= await controlador.iniciar_sesion('usuarios',req.body); 
-        respuestas.success(req, res, items, 200)
     } catch (err) {
         next(err);
     }
