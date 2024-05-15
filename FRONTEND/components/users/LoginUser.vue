@@ -7,20 +7,8 @@
       </v-card-title>
       <v-sheet class="mx-auto" width="300">
         <v-form fast-fail @submit.prevent>
-          <v-text-field
-            v-model="email"
-            type="email"
-            maxlength="100"
-            :rules="necesario"
-            label="Correo Institucional"
-          />
-          <v-text-field
-            v-model="password"
-            type="password"
-            maxlength="255"
-            :rules="passwords"
-            label="Contraseña"
-          />
+          <v-text-field v-model="email" type="email" maxlength="100" :rules="necesario" label="Correo Institucional" />
+          <v-text-field v-model="password" type="password" maxlength="255" :rules="passwords" label="Contraseña" />
           <v-btn class="mt-2" block @click="iniciar_sesion()">
             Iniciar Sesion
           </v-btn>
@@ -67,16 +55,29 @@ export default {
           Usu_Correo: this.email,
           Usu_Password: this.password
         })
-        if (response.data.body.length < 1) { // si al hacer fetch no se encuentra el usuario:
-          // console.error('Error al iniciar sesión')
-          this.showText = true
+
+        if (response.data.body.length < 1) {
+          this.showText = true // Mostrar mensaje de error si el usuario no se encuentra
         } else {
-          const NUA = response.data.body[0].Usu_NUA
-          // console.log(NUA)
+          const NUA = response.data.body[0].Usu_NUA // Obtener el NUA de la respuesta
+
+          // Definir el tiempo de vencimiento en milisegundos (por ejemplo, 2 días)
+          const tiempoVencimiento = 2 * 60 * 60 * 1000 // 2 días
+
+          // Guardar el NUA en el almacenamiento local (localStorage) con tiempo de vencimiento
+          localStorage.setItem('NUA', NUA)
+
+          // Programar la eliminación del NUA después de que haya transcurrido el tiempo de vencimiento
+          setTimeout(() => {
+            localStorage.removeItem('NUA')
+            // O cualquier otra acción que desees realizar cuando el tiempo de vencimiento expire
+          }, tiempoVencimiento)
+
+          // Redireccionar al usuario a la página principal
           this.$router.push({
             path: '/principal/',
             query: { NUA }
-          }) // redireccionamiento con el NUA de la cuenta iniciada
+          })
         }
       } catch (error) {
         // eslint-disable-next-line no-console

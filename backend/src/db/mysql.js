@@ -110,6 +110,7 @@ function eliminar_vehiculo(tabla, Car_id) {
             return error ? reject(error) : resolve(result);
         })
     })}
+
 //inicio de sesion
 function iniciar_sesion(tabla, data) {
     return new Promise((resolve, reject) => {
@@ -119,12 +120,14 @@ function iniciar_sesion(tabla, data) {
     })
 }
 
+// Calificacion
 function un_Usuario_Calificacion (tabla, Cal_Califica_Usu_NUA) {
     return new Promise((resolve, reject) =>{
         conexion.query(`SELECT * FROM ${tabla} WHERE Cal_Califica_Usu_NUA=${Cal_Califica_Usu_NUA}`, (error,result)=>{
             return error ? reject(error) : resolve(result);
         })
     })}
+
 
 // ====================== Vieajes ======================
 function todos_los_viajes(tabla) {
@@ -134,6 +137,25 @@ function todos_los_viajes(tabla) {
             resolve(result);
         })
     })
+}
+
+// Historial
+function historial (Cal_Califica_Usu_NUA) {
+    return new Promise((resolve, reject) => {
+        const query = `
+        SELECT viajes.Via_Horario, calificaciones.Cal_Califica_Usu_NUA, viajes.Via_Origen, viajes.Precio, calificaciones.Cal_Calificacion
+        FROM viajes
+        INNER JOIN calificaciones ON viajes.Via_Id = calificaciones.Cal_Via_Id
+        WHERE viajes.Via_Con_Usu_NUA = ${Cal_Califica_Usu_NUA}`;
+
+        conexion.query(query, (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
 }
 
 module.exports = {
@@ -149,5 +171,6 @@ module.exports = {
     eliminar_vehiculo,
     iniciar_sesion,
     un_Usuario_Calificacion,
-    todos_los_viajes
+    todos_los_viajes,
+    historial
 }

@@ -1,15 +1,34 @@
 const db= require('../db/mysql')
+const bcryptUtil = require('../utilidades/bcryptUtil');
+const jwtUtil = require('../utilidades/jwtUtil');
 
 //Usuarios
 function todos_usuario(tabla){
     return db.todos_usuario(tabla)
 }
-function un_usuario(tabla,id){
+function un_usuario(tabla, id){
     return db.un_usuario(tabla, id)
 }
 
-function agregar_usuario(tabla,body){
-    return db.agregar_usuario(tabla, body);
+async function agregar_usuario(tabla,body){
+    //console.log('@@@ body controlador ', body)
+    try {
+        // Encriptar la contraseña
+        const contrasenaEncriptada = await bcryptUtil.encriptarContrasena(body.Usu_Password);
+        
+        // Reemplazar la contraseña en texto plano por la contraseña encriptada
+        const data = {
+            ...body,
+            Usu_Password: contrasenaEncriptada
+        };
+
+        // Agregar el usuario con la contraseña encriptada
+        const resultado = await db.agregar_usuario(tabla, data);
+        
+        return resultado;
+    } catch (error) {
+        throw error;
+    }
 }
 
 function actualizar_usuario(tabla,body,id){
@@ -19,6 +38,7 @@ function actualizar_usuario(tabla,body,id){
 function eliminar_usuario(tabla,id){
     return db.eliminar_usuario(tabla, id);
 }
+
 //Vehiculos
 function todos_vehiculo(tabla){
     return db.todos_vehiculo(tabla)
@@ -39,10 +59,9 @@ function eliminar_vehiculo(tabla,id){
     return db.eliminar_vehiculo(tabla, id);
 }
 //Inicio de sesion
-function iniciar_sesion(tabla,body){
-    return db.iniciar_sesion(tabla,body)
-}
+// Iniciar sesión
 
+//Calificacion
 function un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA){
     console.log('@@@ datos =>', tabla, Cal_Califica_Usu_NUA)
     return db.un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA)
@@ -50,6 +69,12 @@ function un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA){
 
 function todos_los_viajes(tabla){
     return db.todos_los_viajes(tabla)
+}
+  
+//Historial
+function historial (Cal_Califica_Usu_NUA) {
+    console.log('@@@ datos =>', Cal_Califica_Usu_NUA)
+    return db.historial (Cal_Califica_Usu_NUA);
 }
 
 module.exports = {
@@ -63,7 +88,9 @@ module.exports = {
     agregar_vehiculo,
     actualizar_vehiculo,
     eliminar_vehiculo,
+    un_Usuario_Calificacion,
     iniciar_sesion,
     un_Usuario_Calificacion,
-    todos_los_viajes
+    todos_los_viajes,
+    historial,
 }

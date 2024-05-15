@@ -1,5 +1,5 @@
 <template>
-  <v-row class="d-flex justify-center">
+  <v-row class="mx-auto">
     <v-card class="pa-6 rounded-xxl my-5 " max-width="800">
       <v-card-title class="headline d-flex justify-center">
         Registrate
@@ -81,6 +81,7 @@
 import axios from 'axios'
 
 export default {
+  layout: 'login',
   data: () => ({
     email: '',
     nua: '',
@@ -131,6 +132,7 @@ export default {
           this.$router.push('/principal') // redireccionamiento
         }
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err)
       }
     }
