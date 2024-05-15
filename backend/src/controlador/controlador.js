@@ -6,7 +6,7 @@ const jwtUtil = require('../utilidades/jwtUtil');
 function todos_usuario(tabla){
     return db.todos_usuario(tabla)
 }
-function un_usuario(tabla,id){
+function un_usuario(tabla, id){
     return db.un_usuario(tabla, id)
 }
 
@@ -61,9 +61,16 @@ function eliminar_vehiculo(tabla,id){
 //Inicio de sesion
 // Iniciar sesión
 
+//Calificacion
 function un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA){
     console.log('@@@ datos =>', tabla, Cal_Califica_Usu_NUA)
     return db.un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA)
+}
+
+//Historial
+function historial (Cal_Califica_Usu_NUA) {
+    console.log('@@@ datos =>', Cal_Califica_Usu_NUA)
+    return db.historial (Cal_Califica_Usu_NUA);
 }
 
 module.exports = {
@@ -77,5 +84,8 @@ module.exports = {
     agregar_vehiculo,
     actualizar_vehiculo,
     eliminar_vehiculo,
-    un_Usuario_Calificacion
+    un_Usuario_Calificacion,
+    iniciar_sesion,
+    un_Usuario_Calificacion,
+    historial,
 }

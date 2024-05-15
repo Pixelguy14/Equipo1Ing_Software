@@ -1,10 +1,11 @@
 const express =  require('express');
 const cors = require('cors');
 const morgan = require('morgan')
-const config= require('./config')
+const config = require('./config')
 
 const usuarios = require('./rutas/usuarios')
 const calificaciones = require ('./rutas/calificaciones')
+const historial = require ('./rutas/historial')
 const vehiculos = require('./rutas/vehiculos')
 
 const app = express() 
@@ -22,6 +23,7 @@ app.use(express.urlencoded ({extended: true}));
 
 app.use('/api/usuarios', usuarios)
 app.use('/api/calificaciones', calificaciones)
+app.use('/api/historial', historial);
 app.use('/api/vehiculos', vehiculos);
 
 module.exports = app;

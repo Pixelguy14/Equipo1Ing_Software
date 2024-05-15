@@ -11,7 +11,7 @@ router.post('/',agregar);
 
 async function todas_Calificaciones (req,res,next){
   try {
-      const items= await controlador.todos('calificaciones'); 
+      const items= await controlador.todos_usuario('calificaciones'); 
       respuestas.success(req, res, items, 200)
   } catch (err) {
       next(err);
