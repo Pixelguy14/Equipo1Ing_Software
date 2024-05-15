@@ -67,6 +67,10 @@ function un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA){
     return db.un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA)
 }
 
+function todos_los_viajes(tabla){
+    return db.todos_los_viajes(tabla)
+}
+  
 //Historial
 function historial (Cal_Califica_Usu_NUA) {
     console.log('@@@ datos =>', Cal_Califica_Usu_NUA)
@@ -87,5 +91,6 @@ module.exports = {
     un_Usuario_Calificacion,
     iniciar_sesion,
     un_Usuario_Calificacion,
+    todos_los_viajes,
     historial,
 }

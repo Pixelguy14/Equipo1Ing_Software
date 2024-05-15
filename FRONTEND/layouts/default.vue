@@ -115,6 +115,19 @@ export default {
           to: '/principal/'
         },
         {
+          title: 'Registrar Vehículo',
+          to: '/principal/reg_vehiculo/'
+        },
+        {
+          title: 'Registrar usuario',
+          to: '/principal/reg_usuario/'
+        },
+        {
+          icon: 'mdi-car-info',
+          title: 'Busqueda de viajes',
+          to: '/principal/busqueda_raites/'
+        },
+        {
           title: 'Historial',
           action: this.historialDialog // Cambio aquí
         }
