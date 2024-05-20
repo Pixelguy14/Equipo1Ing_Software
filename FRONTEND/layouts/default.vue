@@ -30,6 +30,7 @@
         color="white"
         class="fuente"
         style="color: black;"
+        @click="ver_cuenta()"
       >
         Cuenta
       </v-btn>
@@ -48,7 +49,7 @@
       bottom
       right
       fixed
-      elevation="0"
+      elevation="1"
       @click="toggleDarkTheme"
     >
       <v-icon color="grey">
@@ -109,34 +110,33 @@ export default {
         { text: 'Calificación', align: 'center', sortable: false, value: 'Cal_Calificacion' }
       ],
       historialItems: [],
-      items: [
-        {
-          title: 'Menú Principal',
-          to: '/principal/'
-        },
-        {
-          title: 'Registrar Vehículo',
-          to: '/principal/reg_vehiculo/'
-        },
-        {
-          title: 'Registrar usuario',
-          to: '/principal/reg_usuario/'
-        },
-        {
-          icon: 'mdi-car-info',
-          title: 'Busqueda de viajes',
-          to: '/principal/busqueda_raites/'
-        },
-        {
-          title: 'Historial',
-          action: this.historialDialog // Cambio aquí
-        }
-      ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
       title: 'Raites DICIS',
       abrirHistorial: false
+    }
+  },
+  computed: {
+    items () {
+      return [
+        {
+          title: 'Menú Principal',
+          // to: '/principal/',
+          // query: { NUA: this.nuaUrl }
+          action: this.rutaMenu
+        },
+        {
+          title: 'Busqueda de viajes',
+          // to: '/principal/busqueda_raites/',
+          // query: { NUA: this.nuaUrl }
+          action: this.rutaBusqueda
+        },
+        {
+          title: 'Historial',
+          action: this.historialDialog // Cambio aquí
+        }
+      ]
     }
   },
   methods: {
@@ -147,14 +147,16 @@ export default {
       if (item.title === 'Historial') {
         this.fetchHistorialData() // Llamar a fetchHistorialData() antes de abrir el diálogo
         this.abrirHistorial = true // Abrir el diálogo después de obtener los datos
+      } else if (item.title === 'Menú Principal') {
+        this.rutaMenu()
+      } else if (item.title === 'Busqueda de viajes') {
+        this.rutaBusqueda()
       }
     },
-
     historialDialog () {
       this.abrirHistorial = true
       this.fetchHistorialData()
     },
-
     async fetchHistorialData () {
       const storedNUA = localStorage.getItem('NUA')
 
@@ -186,6 +188,27 @@ export default {
         stars.push('mdi-star-outline')
       }
       return stars
+    },
+    ver_cuenta () {
+      const NUA = this.$route.query.NUA // este valor se obtiene desde el LOGIN
+      this.$router.push({
+        path: '/principal/ver_cuenta/',
+        query: { NUA }
+      })
+    },
+    rutaMenu () {
+      const NUA = this.$route.query.NUA // este valor se obtiene desde el LOGIN
+      this.$router.push({
+        path: '/principal/',
+        query: { NUA }
+      })
+    },
+    rutaBusqueda () {
+      const NUA = this.$route.query.NUA
+      this.$router.push({
+        path: '/principal/busqueda_raites/',
+        query: { NUA }
+      })
     }
   }
 }

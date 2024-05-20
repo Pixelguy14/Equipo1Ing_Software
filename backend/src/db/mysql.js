@@ -3,7 +3,7 @@ const config = require('../config');
 
 const dbconfig = {
     host: config.mysql.host.split(':')[0], // Dividir el host para quitar el puerto
-    port: config.mysql.host.split(':')[1], // Agregar el puerto
+    //port: config.mysql.host.split(':')[1], // Agregar el puerto
     user: config.mysql.user,
     password: config.mysql.password,
     database: config.mysql.database,
@@ -81,9 +81,9 @@ function todos_vehiculo(tabla) {
         })
     })
 }
-function un_vehiculo(tabla, Car_id) {
+function un_vehiculo(tabla, Car_Usu_NUA) {
     return new Promise((resolve, reject) =>{
-        conexion.query(`SELECT * FROM ${tabla} WHERE Car_id = ${Car_id}`, (error,result)=>{
+        conexion.query(`SELECT * FROM ${tabla} WHERE Car_Usu_NUA = ${Car_Usu_NUA}`, (error,result)=>{
             return error ? reject(error) : resolve(result);
         })
     })
@@ -96,29 +96,29 @@ function agregar_vehiculo(tabla, data) {
     })
     
 }
-function actualizar_vehiculo(tabla, data, Car_id) {
+function actualizar_vehiculo(tabla, data, Car_Usu_NUA) {
     return new Promise((resolve, reject) =>{
-        conexion.query(`UPDATE ${tabla} SET  Car_Usu_NUA = ?, Car_Modelo = ?, Car_anio = ?, Car_Placas = ?, Car_Capacidad = ?, Car_Color = ? WHERE Car_id = ?`,
-        [data.Car_Usu_NUA, data.Car_Modelo, data.Car_anio, data.Car_Placas, data.Car_Capacidad,data.Car_Color, Car_id] , (error,result)=>{
+        conexion.query(`UPDATE ${tabla} SET Car_Modelo = ?, Car_anio = ?, Car_Placas = ?, Car_Capacidad = ?, Car_Color = ? WHERE Car_Usu_NUA = ?`,
+        [data.Car_Modelo, data.Car_anio, data.Car_Placas, data.Car_Capacidad,data.Car_Color, Car_Usu_NUA] , (error,result)=>{
             return error ? reject(error) : resolve(result);
         })
     })
 }
-function eliminar_vehiculo(tabla, Car_id) {
+function eliminar_vehiculo(tabla, Car_Usu_NUA) {
     return new Promise((resolve, reject) =>{
-        conexion.query(`DELETE FROM ${tabla} WHERE Car_id = ${Car_id}`, (error,result)=>{
+        conexion.query(`DELETE FROM ${tabla} WHERE Car_Usu_NUA = ${Car_Usu_NUA}`, (error,result)=>{
             return error ? reject(error) : resolve(result);
         })
     })}
 
 //inicio de sesion
-function iniciar_sesion(tabla, data) {
+/*function iniciar_sesion(tabla, data) {
     return new Promise((resolve, reject) => {
         conexion.query(`SELECT * FROM ${tabla} WHERE Usu_Correo = ? AND Usu_Password = ?`, [data.Usu_Correo, data.Usu_Password], (error, result) => {
             return error ? reject(error) : resolve(result);
         })
     })
-}
+}*/
 
 // Calificacion
 function un_Usuario_Calificacion (tabla, Cal_Califica_Usu_NUA) {
@@ -129,7 +129,7 @@ function un_Usuario_Calificacion (tabla, Cal_Califica_Usu_NUA) {
     })}
 
 
-// ====================== Vieajes ======================
+// ====================== Viajes ======================
 function todos_los_viajes(tabla) {
     return new Promise((resolve, reject) =>{
         conexion.query(`SELECT * FROM ${tabla}`, (error,result)=>{
@@ -169,7 +169,7 @@ module.exports = {
     agregar_vehiculo,
     actualizar_vehiculo,
     eliminar_vehiculo,
-    iniciar_sesion,
+    /*iniciar_sesion,*/
     un_Usuario_Calificacion,
     todos_los_viajes,
     historial

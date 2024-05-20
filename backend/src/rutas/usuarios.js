@@ -2,7 +2,8 @@ const express = require('express');
 const respuestas= require('../red/respuestas')
 const controlador = require('../controlador/controlador');
 const authController = require('../controlador/authController');
-const jwtUtil = require('../utilidades/jwtUtil')
+const jwtUtil = require('../utilidades/jwtUtil');
+const { compararContrasena } = require('../utilidades/bcryptUtil');
 const router= express.Router()
 
 router.get('/',todos_usuario);
@@ -14,7 +15,7 @@ router.post('/login',iniciar_sesion);
 
 async function todos_usuario (req,res,next){
     try {
-        console.log('@@@ body ', req.body)
+        //console.log('@@@ body ', req.body)
         const items= await controlador.todos_usuario('usuarios'); 
         respuestas.success(req, res, items, 200)
     } catch (err) {
@@ -30,10 +31,12 @@ async function iniciar_sesion(req, res, next) {
         
         if (usuario.error) {
             // Si la propiedad "error" está presente en el objeto retornado, significa que ocurrió un error al iniciar sesión.
+            //console.log("AYUDA: ",usuario.error);
             return res.status(401).json({ mensaje: usuario.error });
         }
 
         if (!usuario) {
+            //console.log("AYUDA: ",usuario.error);
             return res.status(401).json({ mensaje: 'Credenciales inválidas' });
         }
 
@@ -42,6 +45,7 @@ async function iniciar_sesion(req, res, next) {
         return res.status(200).json({ token });
     } catch (error) {
         console.error(error);
+        next(error);
         return res.status(500).json({ mensaje: 'Error en el servidor' });
     }
 }

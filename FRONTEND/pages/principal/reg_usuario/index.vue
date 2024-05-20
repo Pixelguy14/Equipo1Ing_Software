@@ -125,11 +125,14 @@ export default {
         })
         if (this.usu_tipo === 'estudiante_con_vehiculo') {
           this.$router.push({
-            path: '/principal/reg_vehiculo',
+            path: '/principal/reg_vehiculo/',
             query: { NUA }
           }) // redireccionamiento
         } else {
-          this.$router.push('/principal') // redireccionamiento
+          this.$router.push({
+            path: '/'
+            // query: { NUA }
+          }) // redireccionamiento
         }
       } catch (err) {
         // eslint-disable-next-line no-console
