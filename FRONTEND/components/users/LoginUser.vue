@@ -7,7 +7,7 @@
       </v-card-title>
       <v-sheet class="mx-auto" width="300">
         <v-form fast-fail @submit.prevent>
-          <v-text-field v-model="email" type="email" maxlength="100" :rules="necesario" label="Correo Institucional" />
+          <v-text-field v-model="v_nua" type="text" maxlength="6" :rules="necesario" label="NUA" />
           <v-text-field v-model="password" type="password" maxlength="255" :rules="passwords" label="Contraseña" />
           <v-btn class="mt-2" block @click="iniciar_sesion()">
             Iniciar Sesion
@@ -30,7 +30,7 @@ import axios from 'axios'
 
 export default {
   data: () => ({
-    email: '',
+    v_nua: '',
     password: '',
     showText: false,
     necesario: [
@@ -51,15 +51,16 @@ export default {
   methods: {
     async iniciar_sesion () {
       try {
-        const response = await axios.post('http://localhost:4000/api/usuarios/iniciar/', {
-          Usu_Correo: this.email,
+        await axios.post('http://localhost:4000/api/usuarios/login', {
+          Usu_NUA: this.v_nua,
           Usu_Password: this.password
         })
 
-        if (response.data.body.length < 1) {
+        if (this.v_nua === '' || this.password === '') {
           this.showText = true // Mostrar mensaje de error si el usuario no se encuentra
         } else {
-          const NUA = response.data.body[0].Usu_NUA // Obtener el NUA de la respuesta
+          // const NUA = response.data.body[0].Usu_NUA // Obtener el NUA de la respuesta
+          const NUA = this.v_nua
 
           // Definir el tiempo de vencimiento en milisegundos (por ejemplo, 2 días)
           const tiempoVencimiento = 2 * 60 * 60 * 1000 // 2 días
@@ -81,7 +82,9 @@ export default {
         }
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.error('Error al iniciar sesión:', error)
+        console.error('Error al iniciar sesión: ', error.response)
+        // console.error('Error al iniciar sesión: ', error)
+        this.showText = true
       }
     },
     crear_cuenta () {

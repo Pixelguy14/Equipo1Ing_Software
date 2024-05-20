@@ -31,8 +31,25 @@ async function agregar_usuario(tabla,body){
     }
 }
 
-function actualizar_usuario(tabla,body,id){
-    return db.actualizar_usuario(tabla, body, id);
+async function actualizar_usuario(tabla,body,id){
+    try {
+        // Encriptar la contraseña
+        const contrasenaEncriptada = await bcryptUtil.encriptarContrasena(body.Usu_Password);
+        
+        // Reemplazar la contraseña en texto plano por la contraseña encriptada
+        const data = {
+            ...body,
+            Usu_Password: contrasenaEncriptada
+        };
+
+        // Agregar el usuario con la contraseña encriptada
+        const resultado = await db.actualizar_usuario(tabla, data, id);
+        
+        return resultado;
+    } catch (error) {
+        throw error;
+    }
+    // return db.actualizar_usuario(tabla, body, id);
 }
 
 function eliminar_usuario(tabla,id){
@@ -89,7 +106,6 @@ module.exports = {
     actualizar_vehiculo,
     eliminar_vehiculo,
     un_Usuario_Calificacion,
-    iniciar_sesion,
     un_Usuario_Calificacion,
     todos_los_viajes,
     historial,

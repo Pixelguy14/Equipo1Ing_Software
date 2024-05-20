@@ -19,7 +19,7 @@
                 max="2025"
               />
             </p>
-            <p>
+            <!--<p>
               <v-text-field
                 v-model="userInput2"
                 type="text"
@@ -27,7 +27,7 @@
                 maxlength="17"
                 label="Número de identificación del vehiculo"
               />
-            </p>
+            </p>-->
             <p>
               <v-text-field
                 v-model="car_capacidad"
@@ -112,7 +112,7 @@ export default {
         }
       ], // id, nua, modelo, año, placas, capacidad, color
       car_anio: '', // Inicialmente vacío //Año de creacion del vehiculo
-      userInput2: '', // ID del vehiculo
+      // userInput2: '', // ID del vehiculo
       car_capacidad: '', // Capacidad Maxima del vehiculo
       car_modelo: '', // Modelo del vehiculo
       Modelos: [// Lista de modelos
@@ -149,7 +149,8 @@ export default {
         })
         /* (this.car_usu_nua = ''), (this.car_modelo = ''), (this.car_anio = ''),
         (this.car_placas = ''), (this.car_capacidad = ''), (this.car_color = '') */
-        this.$router.push('/principal') // redireccionamiento
+        // this.$router.push('/principal') // redireccionamiento
+        this.$router.push('/') // redireccionamiento
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err)
