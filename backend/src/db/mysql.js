@@ -3,7 +3,7 @@ const config = require('../config');
 
 const dbconfig = {
     host: config.mysql.host.split(':')[0], // Dividir el host para quitar el puerto
-    //port: config.mysql.host.split(':')[1], // Agregar el puerto
+    port: config.mysql.host.split(':')[1], // Agregar el puerto
     user: config.mysql.user,
     password: config.mysql.password,
     database: config.mysql.database,
