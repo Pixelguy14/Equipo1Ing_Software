@@ -1,6 +1,6 @@
 <template>
-  <v-row class="d-flex justify-center">
-    <v-card class="pa-6 rounded-xxl my-5 " max-width="800">
+  <v-row class="d-flex justify-center fuente">
+    <v-card class="pa-6 rounded-xxl my-5" max-width="800">
       <v-card-title class="headline d-flex justify-center">
         Ver Cuenta
       </v-card-title>
@@ -83,7 +83,7 @@
           </p>
           <v-btn
             v-if="btn_vehiculo"
-            class="mt-2 mb-3"
+            class="mt-2 mb-3 fuente"
             block
             @click="editar_vehiculo()"
           >
@@ -143,10 +143,10 @@
               </v-btn>
             </v-col>
             <div v-if="mostrarpopup" class="popup">
-              <div class="contenido-popup">
-                <h2 class="fuente">
+              <v-card class="contenido-popup">
+                <v-card-title class="fuente">
                   Esta accion no se puede revertir!
-                </h2>
+                </v-card-title>
                 <v-btn
                   rounded
                   x-medium
@@ -163,11 +163,12 @@
                   elevation="1"
                   color="white"
                   class="fuente"
+                  style="color: black;"
                   @click="mostrarpopup = false"
                 >
                   Cancelar
                 </v-btn>
-              </div>
+              </v-card>
             </div>
           </v-row>
         </v-form>
@@ -238,6 +239,7 @@ export default {
           this.btn_vehiculo = false
         }
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err)
       }
     },
@@ -284,6 +286,7 @@ export default {
           }
         )
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err)
       }
       this.Usuario_id()
@@ -294,6 +297,7 @@ export default {
           `http://localhost:4000/api/usuarios/${this.nua}`
         )
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err)
       }
       this.$router.push('/') // redireccionamiento
@@ -321,7 +325,6 @@ export default {
 }
 
 .contenido-popup {
-  background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;

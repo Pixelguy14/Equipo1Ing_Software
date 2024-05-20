@@ -89,7 +89,7 @@ export default {
     },
     crear_cuenta () {
       this.$router.push({
-        path: '/principal/reg_usuario/'
+        path: '/reg_usuario/'
       }) // redireccionamiento con el NUA de la cuenta iniciada
     }
   }
