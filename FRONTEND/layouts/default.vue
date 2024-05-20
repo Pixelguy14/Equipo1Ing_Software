@@ -1,12 +1,11 @@
-<!-- eslint-disable vue/no-lone-template -->
-<!-- eslint-disable no-console -->
-<!-- eslint-disable no-console -->
 <template>
   <v-app app>
     <v-app-bar :clipped-left="clipped" fixed app elevation="0" color="black">
       <v-toolbar-title style="color: white;" class="fuente">
         {{ title }}
       </v-toolbar-title>
+      <v-spacer />
+      <v-spacer />
       <v-spacer />
       <v-btn
         v-for="(item, i) in items"
@@ -23,6 +22,17 @@
         {{ item.title }}
       </v-btn>
       <v-spacer />
+      <v-btn
+        rounded
+        x-large
+        elevation="0"
+        color="error"
+        class="fuente"
+        style="color: white;margin-right: 1%;"
+        @click="cardCierraSesión = true"
+      >
+        Cerrar Sesión
+      </v-btn>
       <v-btn
         rounded
         x-large
@@ -49,46 +59,62 @@
       bottom
       right
       fixed
-      elevation="1"
+      elevation="0"
       @click="toggleDarkTheme"
     >
       <v-icon color="grey">
         mdi-lightbulb-outline
       </v-icon>
     </v-btn>
-    <v-row justify="center">
-      <v-dialog v-model="abrirHistorial" fullscreen hide-overlay transition="dialog-bottom-transition">
-        <v-card>
-          <v-app-bar :clipped-left="clipped" fixed app elevation="0" color="black">
-            <v-btn icon dark @click="abrirHistorial = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-            <v-toolbar-title style="color: white;" class="fuente">
-              Historial
-            </v-toolbar-title>
-            <v-spacer />
-          </v-app-bar>
-          <v-data-table
-            able
-            elevation="0"
-            :headers="headers"
-            :items="historialItems"
-            :items-per-page="5"
-            hide-default-footer
-            style="margin: 50 auto; max-width: 100% !important;"
-          >
-            <template #top>
-              <v-toolbar flat />
-            </template>
-            <template #[`item.Cal_Calificacion`]="{ item }">
-              <v-icon v-for="(star, index) in getCalificationStars(item.Cal_Calificacion)" :key="index">
-                {{ star }}
-              </v-icon>
-            </template>
-          </v-data-table>
-        </v-card>
-      </v-dialog>
-    </v-row>
+    <v-dialog v-model="abrirHistorial" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-card>
+        <v-app-bar :clipped-left="clipped" fixed app elevation="0" color="black">
+          <v-btn icon dark @click="abrirHistorial = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title style="color: white;" class="fuente">
+            Historial
+          </v-toolbar-title>
+          <v-spacer />
+        </v-app-bar>
+        <v-data-table
+          able
+          elevation="0"
+          :headers="headers"
+          :items="historialItems"
+          :items-per-page="5"
+          hide-default-footer
+          style="margin: 50 auto; max-width: 100% !important;"
+        >
+          <template #top>
+            <v-toolbar flat />
+          </template>
+          <template #[`item.Cal_Calificacion`]="{ item }">
+            <v-icon v-for="(star, index) in getCalificationStars(item.Cal_Calificacion)" :key="index">
+              {{ star }}
+            </v-icon>
+          </template>
+        </v-data-table>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="cardCierraSesión" max-width="35%">
+      <v-card>
+        <h2 class="d-flex justify-center fuente">
+          ¿Está seguro de querer salir?
+        </h2>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn class="fuente" @click="cardCierraSesión = false">
+            Cancelar
+          </v-btn>
+          <v-spacer />
+          <v-btn color="error" class="fuente" @click="cerrar_sesión()">
+            Salir
+          </v-btn>
+          <v-spacer />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -114,7 +140,8 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'Raites DICIS',
-      abrirHistorial: false
+      abrirHistorial: false,
+      cardCierraSesión: false
     }
   },
   computed: {
@@ -209,6 +236,12 @@ export default {
         path: '/principal/busqueda_raites/',
         query: { NUA }
       })
+    },
+    cerrar_sesión () {
+    // Eliminar el NUA del almacenamiento local
+      localStorage.removeItem('NUA')
+      // Redirigir a la página de inicio de sesión
+      this.$router.push('/')
     }
   }
 }

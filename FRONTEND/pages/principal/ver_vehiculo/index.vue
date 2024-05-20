@@ -7,8 +7,9 @@
       <v-sheet class="mx-auto" width="300">
         <v-card-text>
           <v-btn
-            class="mt-2 mb-3"
-            elevation="0"
+            block
+            class="mt-2 mb-3 fuente"
+            elevation="2"
             append-icon="mdi-keyboard-return"
             @click="regresar()"
           >
@@ -21,13 +22,14 @@
             maxlength="6"
             label="NUA del Conductor"
             append-icon="mdi-account-lock"
-            class="red--text text--lighten-2"
+            class="red--text text--lighten-2 fuente"
             readonly
           />
           <v-text-field
             v-model="car_anio"
             type="number"
             :rules="[() => validarRango(car_anio, 1990, 2025)]"
+            class="fuente"
             label="Año de creación del vehiculo"
             min="1990"
             max="2025"
@@ -45,6 +47,7 @@
             v-model="car_capacidad"
             type="number"
             :rules="[() => validarRango(car_capacidad, 2, 9)]"
+            class="fuente"
             label="Capacidad máxima del vehiculo"
             min="2"
             max="9"
@@ -55,6 +58,7 @@
             v-model="car_modelo"
             :items="Modelos"
             label="Modelo del vehículo"
+            class="fuente"
             placeholder="Selecciona un modelo"
             :readonly="isReadOnly"
             :append-icon="icono"
@@ -64,6 +68,7 @@
             type="text"
             :rules="necesario"
             maxlength="30"
+            class="fuente"
             label="Color del Vehiculo"
             :readonly="isReadOnly"
             :append-icon="icono"
@@ -73,6 +78,7 @@
             type="text"
             :rules="necesario"
             maxlength="20"
+            class="fuente"
             label="Placas del Vehiculo"
             :readonly="isReadOnly"
             :append-icon="icono"
@@ -241,6 +247,7 @@ export default {
         this.car_color = respuesta.data.body[0].Car_Color
         this.car_id = respuesta.data.body[0].Car_id
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err)
         const NUA = this.car_usu_nua
         this.$router.push({
@@ -276,6 +283,7 @@ export default {
           }
         )
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err)
       }
       this.Vehiculo_id()
@@ -286,6 +294,7 @@ export default {
           `http://localhost:4000/api/vehiculos/${this.car_usu_nua}`
         )
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(err)
       }
       this.$router.push('/principal/ver_cuenta/') // redireccionamiento
@@ -307,7 +316,6 @@ export default {
 }
 
 .contenido-popup {
-  background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;

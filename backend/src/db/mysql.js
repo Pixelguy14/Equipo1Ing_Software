@@ -1,13 +1,15 @@
 const mysql = require('mysql');
 const config = require('../config');
 
+const [host, port] = config.mysql.host.split(':');
+
 const dbconfig = {
-    host: config.mysql.host.split(':')[0], // Dividir el host para quitar el puerto
-    //port: config.mysql.host.split(':')[1], // Agregar el puerto
+    host: host,
+    port: port,
     user: config.mysql.user,
     password: config.mysql.password,
     database: config.mysql.database,
-}
+};
 
 let conexion;
 
@@ -16,14 +18,15 @@ function conMysql() {
 
     conexion.connect((err) => {
         if (err) {
-            console.log('[db error]', err)
+            console.error('[db error]', err);
+            setTimeout(conMysql, 2000); // Reintentar la conexión después de 2 segundos
         } else {
             console.log('Conexión a la base de datos exitosa');
         }
     });
 
-    conexion.on('error', err => {
-        console.log('Error en la base de datos', err);
+    conexion.on('error', (err) => {
+        console.error('Error en la base de datos', err);
         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
             conMysql();
         } else {
@@ -31,7 +34,6 @@ function conMysql() {
         }
     });
 }
-
 conMysql();
 
 //Usuarios
