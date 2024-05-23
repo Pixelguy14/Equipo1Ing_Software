@@ -29,6 +29,17 @@
         color="error"
         class="fuente"
         style="color: white;margin-right: 1%;"
+        @click="goCrearViaje()"
+      >
+        Crear Viaje
+      </v-btn>
+      <v-btn
+        rounded
+        x-large
+        elevation="0"
+        color="error"
+        class="fuente"
+        style="color: white;margin-right: 1%;"
         @click="cardCierraSesión = true"
       >
         Cerrar Sesión
@@ -242,6 +253,9 @@ export default {
       localStorage.removeItem('NUA')
       // Redirigir a la página de inicio de sesión
       this.$router.push('/')
+    },
+    goCrearViaje () {
+      this.$router.push('/principal/crear_viaje')
     }
   }
 }
