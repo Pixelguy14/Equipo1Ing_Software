@@ -44,7 +44,7 @@
               item-text="nombre"
               item-value="nombre"
               outlined
-            ></v-select>
+            />
           </v-col>
           <v-col cols="6">
             <v-select
@@ -54,7 +54,7 @@
               item-text="nombre"
               item-value="nombre"
               outlined
-            ></v-select>
+            />
           </v-col>
         </v-row>
         <v-row justify="center">
@@ -230,17 +230,17 @@ export default {
       ]
     }
   },
+  computed: {
+    filteredViajes () {
+      return this.viajes.filter((viaje) => {
+        return (!this.origen || viaje.origen === this.origen) &&
+               (!this.destino || viaje.destino === this.destino)
+      })
+    }
+  },
   /* Creacion de la pagina */
   async created () {
     await this.get_raites()
-  },
-  computed: {
-    filteredViajes() {
-      return this.viajes.filter(viaje => {
-        return (!this.origen || viaje.origen === this.origen) &&
-               (!this.destino || viaje.destino === this.destino);
-      });
-    }
   },
   methods: {
 
