@@ -34,6 +34,29 @@
       </v-card-title>
       <!-- filtros -->
       <v-container>
+        <!-- Lugares de origen y destino -->
+        <v-row>
+          <v-col cols="6">
+            <v-select
+              v-model="origen"
+              :items="municipios"
+              label="Origen"
+              item-text="nombre"
+              item-value="nombre"
+              outlined
+            ></v-select>
+          </v-col>
+          <v-col cols="6">
+            <v-select
+              v-model="destino"
+              :items="municipios"
+              label="Destino"
+              item-text="nombre"
+              item-value="nombre"
+              outlined
+            ></v-select>
+          </v-col>
+        </v-row>
         <v-row justify="center">
           <v-col cols="auto">
             <v-btn
@@ -82,7 +105,7 @@
       <!-- container de scroll -->
       <v-container class="cards-scroll">
         <!-- viajes disponibles -->
-        <v-container v-for="(viaje, index) in viajes" :key="index">
+        <v-container v-for="(viaje, index) in filteredViajes" :key="index">
           <v-card class="raite">
             <v-col>
               <v-container>
@@ -149,18 +172,75 @@
 </template>
 
 <script>
-
 import axios from 'axios'
 
 export default {
   data () {
     return {
-      viajes: []
+      viajes: [],
+      origen: null,
+      destino: null,
+      municipios: [
+        { nombre: 'DICIS' },
+        { nombre: 'Abasolo' },
+        { nombre: 'Acámbaro' },
+        { nombre: 'Apaseo el Alto' },
+        { nombre: 'Apaseo el Grande' },
+        { nombre: 'Atarjea' },
+        { nombre: 'Celaya' },
+        { nombre: 'Comonfort' },
+        { nombre: 'Coroneo' },
+        { nombre: 'Cortazar' },
+        { nombre: 'Cuerámaro' },
+        { nombre: 'Doctor Mora' },
+        { nombre: 'Dolores Hidalgo' },
+        { nombre: 'Guanajuato' },
+        { nombre: 'Huanímaro' },
+        { nombre: 'Irapuato' },
+        { nombre: 'Jaral del Progreso' },
+        { nombre: 'Jerécuaro' },
+        { nombre: 'León' },
+        { nombre: 'Moroleón' },
+        { nombre: 'Ocampo' },
+        { nombre: 'Pénjamo' },
+        { nombre: 'Pueblo Nuevo' },
+        { nombre: 'Purísima del Rincón' },
+        { nombre: 'Romita' },
+        { nombre: 'Salamanca' },
+        { nombre: 'Salvatierra' },
+        { nombre: 'San Diego de la Unión' },
+        { nombre: 'San Felipe' },
+        { nombre: 'San Francisco del Rincón' },
+        { nombre: 'San José Iturbide' },
+        { nombre: 'San Luis de la Paz' },
+        { nombre: 'San Miguel de Allende' },
+        { nombre: 'Santa Catarina' },
+        { nombre: 'Santa Cruz de Juventino Rosas' },
+        { nombre: 'Santiago Maravatío' },
+        { nombre: 'Silao' },
+        { nombre: 'Tarandacuao' },
+        { nombre: 'Tarimoro' },
+        { nombre: 'Tierra Blanca' },
+        { nombre: 'Uriangato' },
+        { nombre: 'Valle de Santiago' },
+        { nombre: 'Victoria' },
+        { nombre: 'Villagrán' },
+        { nombre: 'Xichú' },
+        { nombre: 'Yuriria' }
+      ]
     }
   },
   /* Creacion de la pagina */
   async created () {
     await this.get_raites()
+  },
+  computed: {
+    filteredViajes() {
+      return this.viajes.filter(viaje => {
+        return (!this.origen || viaje.origen === this.origen) &&
+               (!this.destino || viaje.destino === this.destino);
+      });
+    }
   },
   methods: {
 
@@ -209,94 +289,94 @@ export default {
 </script>
 
 <style scoped>
-  template {
-    font-size: 1.5em;
-    background-color: aliceblue;
-    color: white;
-  }
-  .title-busqueda {
-    font-size: 2em;
-    color: gre#717171;
-  }
-  .input-con-busqueda {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: gray;
-  }
-  .img_new {
-    height: 10px;
-    width: 30px;
-  }
-  .new_container {
-    display: flex;
-    height: 100%;
-    width: auto;
-    background-color: aquamarine;
-  }
-  .btn-filter{
-    background-color: #387ED0;
-    color: #717171;
-    border-radius: 24px;
-    border: 1px solid #717171;
-  }
-  .cards-scroll {
-    overflow-y: auto;
-    height: 500px;
-  }
-  .car-news {
-    background-image: url('./static/img_cinturon.jpg');
-    background-size: cover; /* Esto hará que la imagen de fondo cubra todo el v-card */
-    background-position: center;
-    border-radius: 24px;
-    height: 720px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-    align-items: flex-start;
-  }
-  .new-title{
-    font-size: 2em;
-    padding-left: 50px;
-    padding-right: 50px;
-  }
-  .new-info{
-    font-size: 1em;
-    text-align: justify;
-    line-height: 1.5;
-    padding-top: 10px;
-    padding-left: 50px;
-    padding-right: 50px;
-    padding-bottom: 50px;
-  }
-  .raite{
-    background: linear-gradient(to right, #060C10, #387ED0);
-    border-radius: 24px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-    /* align-items: flex-start; */
-  }
-  .raite-cont-title-price{
-    display: flex;
-  }
-  .raite-destino{
-    display: flex;
-  }
-  .raite-con-precio{
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    size: 1em;
-  }
-  .raite-precio{
-    font-size: 1.5em;
-    color: white;
-  }
-  .v-tab {
-    border: 1px solid gray;
-    background-color: #F0F0F0;
-  }
+template {
+  font-size: 1.5em;
+  background-color: aliceblue;
+  color: white;
+}
+.title-busqueda {
+  font-size: 2em;
+  color: gre#717171;
+}
+.input-con-busqueda {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: gray;
+}
+.img_new {
+  height: 10px;
+  width: 30px;
+}
+.new_container {
+  display: flex;
+  height: 100%;
+  width: auto;
+  background-color: aquamarine;
+}
+.btn-filter{
+  background-color: #387ED0;
+  color: #717171;
+  border-radius: 24px;
+  border: 1px solid #717171;
+}
+.cards-scroll {
+  overflow-y: auto;
+  height: 500px;
+}
+.car-news {
+  background-image: url('./static/img_cinturon.jpg');
+  background-size: cover; /* Esto hará que la imagen de fondo cubra todo el v-card */
+  background-position: center;
+  border-radius: 24px;
+  height: 720px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+.new-title{
+  font-size: 2em;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.new-info{
+  font-size: 1em;
+  text-align: justify;
+  line-height: 1.5;
+  padding-top: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 50px;
+}
+.raite{
+  background: linear-gradient(to right, #060C10, #387ED0);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  /* align-items: flex-start; */
+}
+.raite-cont-title-price{
+  display: flex;
+}
+.raite-destino{
+  display: flex;
+}
+.raite-con-precio{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  size: 1em;
+}
+.raite-precio{
+  font-size: 1.5em;
+  color: white;
+}
+.v-tab {
+  border: 1px solid gray;
+  background-color: #F0F0F0;
+}
 </style>
