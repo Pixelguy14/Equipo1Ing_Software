@@ -129,10 +129,10 @@ export default {
       drawer: false,
       fixed: false,
       headers: [
-        { text: 'Fecha', align: 'center', sortable: true, value: 'Via_Horario' },
+        { text: 'Fecha', align: 'center', sortable: true, value: 'via_fecha_hora' },
         { text: 'NUA', align: 'center', sortable: true, value: 'Cal_Califica_Usu_NUA' },
-        { text: 'Origen', align: 'center', sortable: true, value: 'Via_Origen' },
-        { text: 'Precio', align: 'center', sortable: true, value: 'Precio' },
+        { text: 'Origen', align: 'center', sortable: true, value: 'via_origen' },
+        { text: 'Precio', align: 'center', sortable: true, value: 'via_costo' },
         { text: 'Calificación', align: 'center', sortable: false, value: 'Cal_Calificacion' }
       ],
       historialItems: [],
@@ -194,7 +194,7 @@ export default {
           const response = await axios.get(apiUrl)
           this.historialItems = response.data.body.map(item => ({
             ...item,
-            Via_Horario: new Date(item.Via_Horario).toLocaleDateString()
+            via_fecha_hora: new Date(item.via_fecha_hora).toLocaleDateString()
           }))
         } catch (error) {
           // eslint-disable-next-line no-console
