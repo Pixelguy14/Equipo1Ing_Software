@@ -1,6 +1,11 @@
 <template>
   <v-app app>
-    <v-app-bar :clipped-left="clipped" fixed app elevation="0" color="black">
+    <v-app-bar :clipped-left="clipped" fixed app elevation="0" class="bg-gradient">
+      <v-img
+        src="https://cdn-icons-png.flaticon.com/512/5509/5509636.png"
+        alt="Circular Image"
+        style="max-height: 40px; max-width: 40px;"
+      />
       <v-toolbar-title style="color: white;" class="fuente">
         {{ title }}
       </v-toolbar-title>
@@ -68,7 +73,7 @@
     </v-btn>
     <v-dialog v-model="abrirHistorial" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
-        <v-app-bar :clipped-left="clipped" fixed app elevation="0" color="black">
+        <v-app-bar :clipped-left="clipped" fixed app elevation="0" class="bg-gradient">
           <v-btn icon dark @click="abrirHistorial = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -129,10 +134,10 @@ export default {
       drawer: false,
       fixed: false,
       headers: [
-        { text: 'Fecha', align: 'center', sortable: true, value: 'via_fecha_hora' },
+        { text: 'Fecha', align: 'center', sortable: true, value: 'Via_Horario' },
         { text: 'NUA', align: 'center', sortable: true, value: 'Cal_Califica_Usu_NUA' },
-        { text: 'Origen', align: 'center', sortable: true, value: 'via_origen' },
-        { text: 'Precio', align: 'center', sortable: true, value: 'via_costo' },
+        { text: 'Origen', align: 'center', sortable: true, value: 'Via_Origen' },
+        { text: 'Precio', align: 'center', sortable: true, value: 'Precio' },
         { text: 'Calificación', align: 'center', sortable: false, value: 'Cal_Calificacion' }
       ],
       historialItems: [],
@@ -194,7 +199,7 @@ export default {
           const response = await axios.get(apiUrl)
           this.historialItems = response.data.body.map(item => ({
             ...item,
-            via_fecha_hora: new Date(item.via_fecha_hora).toLocaleDateString()
+            Via_Horario: new Date(item.Via_Horario).toLocaleDateString()
           }))
         } catch (error) {
           // eslint-disable-next-line no-console
@@ -251,5 +256,11 @@ export default {
 .fuente {
   font-weight: bold;
   font-family: Source Sans Pro;
+}
+.bg-gradient {
+  background-image: linear-gradient(135deg, #576cb9, #343c61);
+  /* Adjust the angle and colors as needed */
+  /* You can also use rgba values for more control */
+  /* Example: background-image: linear-gradient(135deg, rgba(95, 190, 115, 1), rgba(103, 190, 96, 1)); */
 }
 </style>
