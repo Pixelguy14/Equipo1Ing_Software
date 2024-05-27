@@ -222,25 +222,40 @@ export default {
       return stars
     },
     ver_cuenta () {
+      const token = localStorage.getItem('token')
       const NUA = this.$route.query.NUA // este valor se obtiene desde el LOGIN
-      this.$router.push({
-        path: '/principal/ver_cuenta/',
-        query: { NUA }
-      })
+      if (token) {
+        this.$router.push({
+          path: '/principal/ver_cuenta/',
+          query: { NUA }
+        })
+      } else {
+        this.$router.push('/')
+      }
     },
     rutaMenu () {
+      const token = localStorage.getItem('token')
       const NUA = this.$route.query.NUA // este valor se obtiene desde el LOGIN
-      this.$router.push({
-        path: '/principal/',
-        query: { NUA }
-      })
+      if (token) {
+        this.$router.push({
+          path: '/principal/',
+          query: { NUA }
+        })
+      } else {
+        this.$router.push('/')
+      }
     },
     rutaBusqueda () {
+      const token = localStorage.getItem('token')
       const NUA = this.$route.query.NUA
-      this.$router.push({
-        path: '/principal/busqueda_raites/',
-        query: { NUA }
-      })
+      if (token) {
+        this.$router.push({
+          path: '/principal/busqueda_raites/',
+          query: { NUA }
+        })
+      } else {
+        this.$router.push('/')
+      }
     },
     cerrar_sesión () {
     // Eliminar el NUA del almacenamiento local

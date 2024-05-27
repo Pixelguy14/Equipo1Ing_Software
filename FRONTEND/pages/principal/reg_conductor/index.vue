@@ -93,6 +93,13 @@ export default {
         return 'La contraseña debe contener mas de 8 caracteres.'
       }
     ]
-  })
+  }),
+  mounted () {
+    const token = localStorage.getItem('token')
+    console.log('token', token)
+    if (!token) {
+      this.$router.push('/')
+    }
+  }
 }
 </script>

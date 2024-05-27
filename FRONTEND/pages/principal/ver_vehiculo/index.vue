@@ -225,6 +225,13 @@ export default {
     this.car_usu_nua = this.$route.query.NUA
     this.Vehiculo_id()
   },
+  mounted () {
+    const token = localStorage.getItem('token')
+    console.log('token', token)
+    if (!token) {
+      this.$router.push('/')
+    }
+  },
   methods: {
     habilitar_editar () {
       this.btn_habilitar = false

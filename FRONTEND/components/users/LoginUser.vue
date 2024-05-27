@@ -78,42 +78,48 @@ export default {
   methods: {
     async iniciar_sesion () {
       try {
-        await axios.post('http://localhost:4000/api/usuarios/login', {
+      // Realizar la solicitud de inicio de sesión
+        const response = await axios.post('http://localhost:4000/api/usuarios/login', {
           Usu_NUA: this.v_nua,
           Usu_Password: this.password
         })
 
+        // Verificar si las credenciales están vacías
         if (this.v_nua === '' || this.password === '') {
           this.showText = true // Mostrar mensaje de error si el usuario no se encuentra
         } else {
-          // const NUA = response.data.body[0].Usu_NUA // Obtener el NUA de la respuesta
-          const NUA = this.v_nua
+        // Obtener el token de la respuesta
+          const token = response.data.token
 
+          if (token) {
           // Definir el tiempo de vencimiento en milisegundos (por ejemplo, 2 días)
-          const tiempoVencimiento = 2 * 60 * 60 * 1000 // 2 días
+            const tiempoVencimiento = 2 * 24 * 60 * 60 * 1000 // 2 días
 
-          // Guardar el NUA en el almacenamiento local (localStorage) con tiempo de vencimiento
-          localStorage.setItem('NUA', NUA)
+            // Guardar el token en el almacenamiento local (localStorage) con tiempo de vencimiento
+            localStorage.setItem('token', token)
 
-          // Programar la eliminación del NUA después de que haya transcurrido el tiempo de vencimiento
-          setTimeout(() => {
-            localStorage.removeItem('NUA')
+            // Programar la eliminación del token después de que haya transcurrido el tiempo de vencimiento
+            setTimeout(() => {
+              localStorage.removeItem('token')
             // O cualquier otra acción que desees realizar cuando el tiempo de vencimiento expire
-          }, tiempoVencimiento)
+            }, tiempoVencimiento)
 
-          // Redireccionar al usuario a la página principal
-          this.$router.push({
-            path: '/principal/',
-            query: { NUA }
-          })
+            // Redireccionar al usuario a la página principal
+            this.$router.push({
+              path: '/principal/',
+              query: { NUA: this.v_nua }
+            })
+          } else {
+            this.showText = true // Mostrar mensaje de error si el token no está presente
+          }
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
+      // Manejar errores de la solicitud de inicio de sesión
         console.error('Error al iniciar sesión: ', error.response)
-        // console.error('Error al iniciar sesión: ', error)
         this.showText = true
       }
     },
+
     crear_cuenta () {
       this.$router.push({
         path: '/reg_usuario/'

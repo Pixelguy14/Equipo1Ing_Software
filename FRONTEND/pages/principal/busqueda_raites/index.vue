@@ -238,6 +238,13 @@ export default {
       })
     }
   },
+  mounted () {
+    const token = localStorage.getItem('token')
+    console.log('token', token)
+    if (!token) {
+      this.$router.push('/')
+    }
+  },
   /* Creacion de la pagina */
   async created () {
     await this.get_raites()

@@ -233,6 +233,13 @@ export default {
     this.nua = this.$route.query.NUA
     this.Usuario_id()
   },
+  mounted () {
+    const token = localStorage.getItem('token')
+    console.log('token', token)
+    if (!token) {
+      this.$router.push('/')
+    }
+  },
   methods: {
     async Usuario_id () {
       try {

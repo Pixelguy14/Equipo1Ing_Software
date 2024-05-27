@@ -123,6 +123,13 @@ export default {
       car_usu_nua: this.$route.query.NUA // NUA (Preeliminar)
     }
   },
+  mounted () {
+    const token = localStorage.getItem('token')
+    console.log('token', token)
+    if (!token) {
+      this.$router.push('/')
+    }
+  },
   methods: {
     validarRango (value, min, max) {
       const intValue = parseInt(value)
