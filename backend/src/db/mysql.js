@@ -160,6 +160,25 @@ function historial (Cal_Califica_Usu_NUA) {
     });
 }
 
+//Reservar viajes
+function todos_reservas(tabla) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`SELECT * FROM ${tabla}`, (error,result)=>{
+            if(error) return reject(error);
+            resolve(result);
+        })
+    })
+}
+
+function agregar_reserva(tabla, data) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`INSERT INTO ${tabla} SET ?`, data , (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })
+    
+}
+
 module.exports = {
     todos_usuario,
     un_usuario,
@@ -174,5 +193,7 @@ module.exports = {
     /*iniciar_sesion,*/
     un_Usuario_Calificacion,
     todos_los_viajes,
-    historial
+    historial,
+    agregar_reserva,
+    todos_reservas
 }

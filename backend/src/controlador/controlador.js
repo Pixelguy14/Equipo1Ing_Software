@@ -94,6 +94,14 @@ function historial (Cal_Califica_Usu_NUA) {
     return db.historial (Cal_Califica_Usu_NUA);
 }
 
+//reservas
+function todos_reservas(tabla){
+    return db.todos_reservas(tabla)
+}
+function agregar_reserva(tabla,body){
+    return db.agregar_reserva(tabla, body);
+}
+
 module.exports = {
     todos_usuario,
     un_usuario,
@@ -109,4 +117,6 @@ module.exports = {
     un_Usuario_Calificacion,
     todos_los_viajes,
     historial,
+    todos_reservas,
+    agregar_reserva
 }
