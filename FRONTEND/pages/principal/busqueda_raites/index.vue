@@ -150,52 +150,59 @@
     </v-row>
 
     <!-- Ventana emergente para reservar viaje -->
-<v-dialog v-model="mostrarVentanaReserva" max-width="600">
-  <v-card>
-    <v-card-title class="text-h5 lighten-2" style="background-image: linear-gradient(135deg, #576cb9, #343c61);">
-      Reservar Viaje
-    </v-card-title>
-    <v-card-text>
-      <v-form @submit.prevent="agregar_reservas">
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field v-model="usu_nua" label="Tu NUA" required outlined />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field v-model="num_asientos" label="Cantidad de asientos" required outlined />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-form>
-    </v-card-text>
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn color="primary" @click="agregar_reservas">
-        Reservar
-      </v-btn>
-    </v-card-actions>
-  </v-card>
-</v-dialog>
+    <v-dialog v-model="mostrarVentanaReserva" max-width="600">
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-image: linear-gradient(135deg, #576cb9, #343c61);">
+          Reservar Viaje
+        </v-card-title>
+        <v-card-text>
+          <v-form ref="form" v-model="formValid" @submit.prevent="agregar_reservas">
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field v-model="usu_nua" label="Tu NUA" max-length="6" readonly required outlined />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field 
+                    type="number" 
+                    v-model="num_asientos" 
+                    :label="`Cantidad de asientos (Max: ${maxAsientos})`" 
+                    :rules="[asientosRule]" 
+                    required 
+                    outlined 
+                  />
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn :disabled="!formValid" color="primary" @click="agregar_reservas">
+            Reservar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-<!-- Nuevo diálogo de viaje reservado -->
-<v-dialog v-model="mostrarDialogoReservado" max-width="400">
-  <v-card>
-    <v-card-title class="text-h5 lighten-2" style="background-image: linear-gradient(135deg, #576cb9, #343c61);">
-      Viaje Reservado
-    </v-card-title>
-    <v-card-text>
-      Tu viaje ha sido reservado con éxito.
-    </v-card-text>
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn color="primary" @click="mostrarDialogoReservado = false">
-        Cerrar
-      </v-btn>
-    </v-card-actions>
-  </v-card>
-</v-dialog>
 
+    <!-- Nuevo diálogo de viaje reservado -->
+    <v-dialog v-model="mostrarDialogoReservado" max-width="400">
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-image: linear-gradient(135deg, #576cb9, #343c61);">
+          Viaje Reservado
+        </v-card-title>
+        <v-card-text>
+          Tu viaje ha sido reservado con éxito.
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="mostrarDialogoReservado = false">
+            Cerrar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -210,17 +217,60 @@ export default {
       destino: null,
       fechaFiltro: null,
       municipios: [
-        { nombre: 'DICIS' },
-        { nombre: 'Abasolo' },
-        { nombre: 'Acámbaro' },
-        // ... (otros municipios)
-        { nombre: 'Yuriria' }
+        { "nombre": "DICIS" },
+        { "nombre": "Abasolo" },
+        { "nombre": "Acámbaro" },
+        { "nombre": "Apaseo el Alto" },
+        { "nombre": "Apaseo el Grande" },
+        { "nombre": "Atarjea" },
+        { "nombre": "Celaya" },
+        { "nombre": "Comonfort" },
+        { "nombre": "Coroneo" },
+        { "nombre": "Cortazar" },
+        { "nombre": "Cuerámaro" },
+        { "nombre": "Doctor Mora" },
+        { "nombre": "Dolores Hidalgo Cuna de la Independencia Nacional" },
+        { "nombre": "Guanajuato" },
+        { "nombre": "Huanímaro" },
+        { "nombre": "Irapuato" },
+        { "nombre": "Jaral del Progreso" },
+        { "nombre": "Jerécuaro" },
+        { "nombre": "León" },
+        { "nombre": "Manuel Doblado" },
+        { "nombre": "Moroleón" },
+        { "nombre": "Ocampo" },
+        { "nombre": "Pénjamo" },
+        { "nombre": "Pueblo Nuevo" },
+        { "nombre": "Purísima del Rincón" },
+        { "nombre": "Romita" },
+        { "nombre": "Salamanca" },
+        { "nombre": "Salvatierra" },
+        { "nombre": "San Diego de la Unión" },
+        { "nombre": "San Felipe" },
+        { "nombre": "San Francisco del Rincón" },
+        { "nombre": "San José Iturbide" },
+        { "nombre": "San Luis de la Paz" },
+        { "nombre": "San Miguel de Allende" },
+        { "nombre": "Santa Catarina" },
+        { "nombre": "Santa Cruz de Juventino Rosas" },
+        { "nombre": "Santiago Maravatío" },
+        { "nombre": "Silao de la Victoria" },
+        { "nombre": "Tarandacuao" },
+        { "nombre": "Tarimoro" },
+        { "nombre": "Tierra Blanca" },
+        { "nombre": "Uriangato" },
+        { "nombre": "Valle de Santiago" },
+        { "nombre": "Victoria" },
+        { "nombre": "Villagrán" },
+        { "nombre": "Xichú" },
+        { "nombre": "Yuriria" }
       ],
       mostrarVentanaReserva: false,
       mostrarDialogoReservado: false, // Nueva variable de estado
       usu_nua: this.$route.query.NUA,
       num_asientos: '',
       viajeId: null,
+      formValid: false, //variable para controlar la validación del formulario
     }
   },
   computed: {
@@ -239,6 +289,13 @@ export default {
                (!this.destino || viaje.destino === this.destino) &&
                filtroFecha
       })
+    },
+    maxAsientos() {
+      const viajeSeleccionado = this.viajes.find(viaje => viaje.via_id === this.viajeId)
+      return viajeSeleccionado ? viajeSeleccionado.espacio_disponible : 0
+    },
+    asientosRule() {
+      return value => (value <= this.maxAsientos && value > 0) || `Máximo ${this.maxAsientos} asientos disponibles`
     }
   },
   async created () {
