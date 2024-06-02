@@ -1,14 +1,39 @@
 <!-- eslint-disable vue/valid-template-root -->
 <template>
   <v-row class="d-flex justify-center">
-    <v-card class="pa-6 rounded-xxl my-5 " max-width="800">
+    <v-card class="pa-6 rounded-xxl my-5" max-width="800">
+      <v-avatar size="80" class="mx-auto d-flex justify-center">
+        <v-img
+          src="https://cdn-icons-png.flaticon.com/512/5509/5509636.png"
+          alt="Circular Image"
+          style="border: 2px solid #343c61; max-height: 80px; max-width: 80px;"
+        />
+      </v-avatar>
       <v-card-title class="headline d-flex justify-center">
         Inicia Sesion
       </v-card-title>
       <v-sheet class="mx-auto" width="300">
-        <v-form fast-fail @submit.prevent>
-          <v-text-field v-model="v_nua" type="text" maxlength="6" :rules="necesario" label="NUA" />
-          <v-text-field v-model="password" type="password" maxlength="255" :rules="passwords" label="Contraseña" />
+        <v-form @submit.prevent="iniciar_sesion()">
+          <v-text-field
+            v-model="v_nua"
+            type="text"
+            maxlength="6"
+            :rules="necesario"
+            label="NUA"
+            :error-messages="ErrorC"
+            @keydown.enter="iniciarEnter()"
+            @keydown="restrictCharacters"
+          />
+          <v-text-field
+            v-model="password"
+            type="password"
+            maxlength="255"
+            :rules="passwords"
+            label="Contraseña"
+            :error-messages="ErrorSC"
+            @keydown.enter="iniciarEnter()"
+            @keydown="restrictSpecialCharacters"
+          />
           <v-btn class="mt-2" block @click="iniciar_sesion()">
             Iniciar Sesion
           </v-btn>
@@ -33,6 +58,8 @@ export default {
     v_nua: '',
     password: '',
     showText: false,
+    ErrorSC: '',
+    ErrorC: '',
     necesario: [
       (value) => {
         if (value?.length > 0) { return true }
@@ -91,6 +118,35 @@ export default {
       this.$router.push({
         path: '/reg_usuario/'
       }) // redireccionamiento con el NUA de la cuenta iniciada
+    },
+    iniciarEnter () {
+      this.iniciar_sesion()
+    },
+    restrictSpecialCharacters (event) {
+      // expresion regular que restringe caracteres especiales excepto la ñ
+      const regex = /[^A-Za-z0-9ñÑ@._]/g
+      if (regex.test(event.key)) {
+        event.preventDefault()
+        this.ErrorSC = 'No se permiten los caracteres especiales'
+      } else {
+        this.ErrorSC = ''
+      }
+    },
+    restrictCharacters (event) {
+      // expresion regular que restringe a solo numeros
+      const regex = /[^0-9]/g
+      if (regex.test(event.key) &&
+          event.keyCode !== 8 &&
+          event.keyCode !== 13 &&
+          event.keyCode !== 16 &&
+          event.keyCode !== 9 &&
+          event.keyCode !== 37 &&
+          event.keyCode !== 39) {
+        event.preventDefault()
+        this.ErrorC = 'Solo se permiten numeros'
+      } else {
+        this.ErrorC = ''
+      }
     }
   }
 }

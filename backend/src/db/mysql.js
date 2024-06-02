@@ -152,10 +152,10 @@ function registrar_viaje(tabla, data) {
 function historial (Cal_Califica_Usu_NUA) {
     return new Promise((resolve, reject) => {
         const query = `
-        SELECT viajes.Via_Horario, calificaciones.Cal_Califica_Usu_NUA, viajes.Via_Origen, viajes.Precio, calificaciones.Cal_Calificacion
+        SELECT viajes.via_fecha_hora, calificaciones.Cal_Califica_Usu_NUA, viajes.via_origen, viajes.via_costo, calificaciones.Cal_Calificacion
         FROM viajes
-        INNER JOIN calificaciones ON viajes.Via_Id = calificaciones.Cal_Via_Id
-        WHERE viajes.Via_Con_Usu_NUA = ${Cal_Califica_Usu_NUA}`;
+        INNER JOIN calificaciones ON viajes.via_Id = calificaciones.Cal_Via_Id
+        WHERE viajes.via_con_usu_NUA = ${Cal_Califica_Usu_NUA}`;
 
         conexion.query(query, (error, result) => {
             if (error) {
