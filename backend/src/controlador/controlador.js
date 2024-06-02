@@ -75,8 +75,6 @@ function actualizar_vehiculo(tabla,body,id){
 function eliminar_vehiculo(tabla,id){
     return db.eliminar_vehiculo(tabla, id);
 }
-//Inicio de sesion
-// Iniciar sesión
 
 //Calificacion
 function un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA){
@@ -92,10 +90,26 @@ function registrar_viaje(tabla, data){
     return db.registrar_viaje(tabla, data)
 }
   
+
+function viajes_conductor(via_con_usu_NUA){
+    return db.viajes_conductor(via_con_usu_NUA)
+}
+
+function eliminar_viaje(via_Id){
+    return db.eliminar_viaje(via_Id)
+}
+
 //Historial
-function historial (Cal_Califica_Usu_NUA) {
-    console.log('@@@ datos =>', Cal_Califica_Usu_NUA)
-    return db.historial (Cal_Califica_Usu_NUA);
+function historialConductor (Cal_Califica_Usu_NUA) {
+    return db.historialConductor (Cal_Califica_Usu_NUA);
+}
+
+function historialPasajero (Cal_Califica_Usu_NUA) {
+    return db.historialPasajero (Cal_Califica_Usu_NUA);
+}
+
+function actualizarViajeStatus (via_Id) {
+    return db.actualizarViajeStatus (via_Id);
 }
 
 module.exports = {
@@ -113,5 +127,9 @@ module.exports = {
     un_Usuario_Calificacion,
     todos_los_viajes,
     registrar_viaje,
-    historial,
+    viajes_conductor,
+    eliminar_viaje,
+    historialConductor,
+    historialPasajero,
+    actualizarViajeStatus
 }

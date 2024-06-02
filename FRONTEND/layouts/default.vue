@@ -28,6 +28,7 @@
       </v-btn>
       <v-spacer />
       <v-btn
+        v-if="esConductor == true"
         rounded
         x-large
         elevation="0"
@@ -93,14 +94,73 @@
           </v-toolbar-title>
           <v-spacer />
         </v-app-bar>
+        <!--Tabla para Conductores (Cambiar status de viajes)-->
         <v-data-table
+          v-if="esConductor==true"
           able
           elevation="0"
-          :headers="headers"
-          :items="historialItems"
+          :headers="headersConductorViajes"
+          :items="viajesItemsConductor"
+          :items-per-page="5"
+          class="fuente"
+          hide-default-footer
+          style="margin-top: 60px; max-width: 100% !important;"
+        >
+          <template #[`item.acciones`]="{ item }">
+            <v-row>
+              <v-col cols="6">
+                <v-btn icon color="warning" @click="cambiarStatusViaje(item.via_Id)">
+                  <v-icon>
+                    mdi-list-status
+                  </v-icon>
+                </v-btn>
+              </v-col>
+              <v-col cols="6">
+                <v-btn icon color="error" @click="eliminarViaje(item)">
+                  <v-icon>
+                    mdi-delete
+                  </v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </template>
+        </v-data-table>
+        <!--Tabla para Conductores (Calificaciones)-->
+        <v-data-table
+          v-if="esConductor==true"
+          able
+          elevation="0"
+          :headers="headersConductor"
+          :items="historialItemsConductor"
+          :items-per-page="5"
+          class="fuente"
+          hide-default-footer
+          style="margin-top: 20px; max-width: 100% !important;"
+        >
+          <template #top>
+            <v-toolbar flat>
+              <v-toolbar-title class="fuente">
+                Calificaciones
+              </v-toolbar-title>
+            </v-toolbar>
+          </template>
+          <template #[`item.Cal_Calificacion`]="{ item }">
+            <v-icon v-for="(star, index) in getCalificationStars(item.Cal_Calificacion)" :key="index">
+              {{ star }}
+            </v-icon>
+          </template>
+        </v-data-table>
+        <!--Tabla para Pasajeros-->
+        <v-data-table
+          v-if="esConductor==false"
+          able
+          elevation="0"
+          :headers="headersPasajero"
+          :items="historialItemsPasajero"
           :items-per-page="5"
           hide-default-footer
-          style="margin: 50 auto; max-width: 100% !important;"
+          class="fuente"
+          style="max-width: 100% !important;"
         >
           <template #top>
             <v-toolbar flat />
@@ -111,6 +171,56 @@
             </v-icon>
           </template>
         </v-data-table>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="showDelete" width="400" persistent>
+      <v-card>
+        <v-card-title>Eliminar Viaje</v-card-title>
+        <v-card-text>¿Estas seguro? Esta accion es irreversible</v-card-text>
+        <v-card-actions>
+          <v-row>
+            <v-col cols="6">
+              <v-btn block color="error" @click="borrar()">
+                <span style="color: white; text-transform: none;">
+                  Borrar
+                </span>
+              </v-btn>
+            </v-col>
+            <v-col cols="6">
+              <v-btn block color="success" @click="showDelete = false">
+                <span style="color: white; text-transform: none;">
+                  Cancelar
+                </span>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="showUpdate" width="400" persistent>
+      <v-card>
+        <v-card-title>Modificar status del viaje</v-card-title>
+        <v-card-text>
+          ¿Estas Seguro de querer terminar el viaje?
+        </v-card-text>
+        <v-card-actions>
+          <v-row>
+            <v-col cols="6">
+              <v-btn block color="success" @click="modificar">
+                <span style="color: error; text-transform: none;">
+                  Terminar
+                </span>
+              </v-btn>
+            </v-col>
+            <v-col cols="6">
+              <v-btn block color="error" @click="showUpdate = false">
+                <span style="color: correct; text-transform: none;">
+                  Cancelar
+                </span>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-actions>
       </v-card>
     </v-dialog>
     <v-dialog v-model="cardCierraSesión" max-width="35%">
@@ -144,20 +254,44 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      headers: [
-        { text: 'Fecha', align: 'center', sortable: true, value: 'Via_Horario' },
-        { text: 'NUA', align: 'center', sortable: true, value: 'Cal_Califica_Usu_NUA' },
-        { text: 'Origen', align: 'center', sortable: true, value: 'Via_Origen' },
-        { text: 'Precio', align: 'center', sortable: true, value: 'Precio' },
-        { text: 'Calificación', align: 'center', sortable: false, value: 'Cal_Calificacion' }
+      headersConductor: [
+        { text: 'Fecha', align: 'left', sortable: true, value: 'via_fecha_hora' },
+        { text: 'NUA de pasajero', align: 'left', sortable: true, value: 'Cal_Califica_Usu_NUA' },
+        { text: 'Origen', align: 'left', sortable: true, value: 'via_origen' },
+        { text: 'Destino', align: 'left', sortable: true, value: 'via_destino' },
+        { text: 'Precio', align: 'left', sortable: true, value: 'via_costo' },
+        { text: 'Calificación', align: 'left', sortable: false, value: 'Cal_Calificacion' }
       ],
-      historialItems: [],
+      headersConductorViajes: [
+        { text: 'Fecha', align: 'left', sortable: true, value: 'via_fecha_hora' },
+        { text: 'Origen', align: 'left', sortable: true, value: 'via_origen' },
+        { text: 'Destino', align: 'left', sortable: true, value: 'via_destino' },
+        { text: 'Precio', align: 'left', sortable: true, value: 'via_costo' },
+        { text: 'Acciones', align: 'center', sortable: false, value: 'acciones' }
+      ],
+      headersPasajero: [
+        { text: 'Fecha', align: 'left', sortable: true, value: 'via_fecha_hora' },
+        { text: 'NUA de conductor', align: 'left', sortable: true, value: 'Cal_Calificado_Usu_NUA' },
+        { text: 'Origen', align: 'left', sortable: true, value: 'via_origen' },
+        { text: 'Destino', align: 'left', sortable: true, value: 'via_destino' },
+        { text: 'Precio', align: 'left', sortable: true, value: 'via_costo' },
+        { text: 'Calificación', align: 'left', sortable: false, value: 'Cal_Calificacion' }
+      ],
+      historialItemsConductor: [],
+      viajesItemsConductor: [],
+      historialItemsPasajero: [],
       miniVariant: false,
       right: true,
       rightDrawer: false,
       title: 'Raites DICIS',
       abrirHistorial: false,
-      cardCierraSesión: false
+      idToDelete: null,
+      cardCierraSesión: false,
+      showDelete: false,
+      showUpdate: false,
+      paraActualizarViaje: null,
+      esConductor: false,
+      conductor: Boolean
     }
   },
   computed: {
@@ -165,56 +299,187 @@ export default {
       return [
         {
           title: 'Menú Principal',
-          // to: '/principal/',
-          // query: { NUA: this.nuaUrl }
           action: this.rutaMenu
         },
         {
           title: 'Busqueda de viajes',
-          // to: '/principal/busqueda_raites/',
-          // query: { NUA: this.nuaUrl }
           action: this.rutaBusqueda
         },
         {
           title: 'Historial',
-          action: this.historialDialog // Cambio aquí
+          action: this.historialDialog
         }
       ]
     }
+  },
+  created () {
+    this.fetchUserData() // Llamar al método para obtener los datos del usuario al crear el componente
   },
   methods: {
     toggleDarkTheme () {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
     },
+
     handleItemClick (item) {
       if (item.title === 'Historial') {
-        this.fetchHistorialData() // Llamar a fetchHistorialData() antes de abrir el diálogo
-        this.abrirHistorial = true // Abrir el diálogo después de obtener los datos
+        if (this.esConductor === true) {
+          this.fetchHistorialDataConductor()
+          this.fetchViajesDataConductor()
+        } else {
+          this.fetchHistorialDataPasajero()
+        }
+        this.abrirHistorial = true
       } else if (item.title === 'Menú Principal') {
         this.rutaMenu()
       } else if (item.title === 'Busqueda de viajes') {
         this.rutaBusqueda()
       }
     },
+
     historialDialog () {
       this.abrirHistorial = true
       this.fetchHistorialData()
     },
-    async fetchHistorialData () {
+
+    eliminarViaje (id) {
+      this.idToDelete = id
+      // eslint-disable-next-line no-console
+      console.log('@@datos =>', this.idToDelete.via_Id)
+      this.showDelete = true
+    },
+
+    borrar () {
+      const url = `http://localhost:4000/api/viajes/${this.idToDelete.via_Id}`
+      this.$axios.delete(url)
+        .then((res) => {
+          // eslint-disable-next-line no-console
+          console.log('@@@ res => ', res)
+          this.showDelete = false
+          this.fetchHistorialDataConductor()
+          this.fetchViajesDataConductor()
+          // Actualizar la lista local si es necesario
+          this.usuarios = this.usuarios.filter(user => user.via_Id !== this.idToDelete.via_Id)
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log('@@@ err => ', err)
+        })
+        .finally(() => {
+          // eslint-disable-next-line no-console
+          console.log('Request completed') // Agrega un mensaje indicando que la petición ha terminado
+        })
+    },
+
+    cambiarStatusViaje (viaje) {
+      this.paraActualizarViaje = viaje
+      // eslint-disable-next-line no-console
+      console.log(this.paraActualizarViaje)
+      this.showUpdate = true
+    },
+
+    modificar () {
+      // eslint-disable-next-line no-console
+      console.log('@@ data =>', this.paraActualizarViaje)
+      const url = `http://localhost:4000/api/historial/conductor/${this.paraActualizarViaje}`
+      this.$axios.put(url, this.paraActualizarViaje)
+        .then((res) => {
+          // eslint-disable-next-line no-console
+          console.log('@@ res =>', res)
+          this.fetchViajesDataConductor()
+          this.fetchHistorialDataConductor()
+          this.showUpdate = false
+          this.email = ''
+          this.passwordUser = ''
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log('@@ err =>', err)
+        })
+    },
+
+    async fetchViajesDataConductor () {
       const storedNUA = localStorage.getItem('NUA')
 
       if (storedNUA) {
         try {
           this.NUA = storedNUA
-          const apiUrl = `http://localhost:4000/api/historial/${this.NUA}`
+          const apiUrl = `http://localhost:4000/api/viajes/${this.NUA}`
           const response = await axios.get(apiUrl)
-          this.historialItems = response.data.body.map(item => ({
+          this.viajesItemsConductor = response.data.body
+            .filter(item => item.via_activo === 1)
+            .map(item => ({
+              ...item,
+              via_fecha_hora: new Date(item.via_fecha_hora).toLocaleDateString()
+            }))
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Error al obtener datos del historial:', error)
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('No se pudo recuperar el NUA del almacenamiento local')
+      }
+    },
+
+    async fetchHistorialDataConductor () {
+      const storedNUA = localStorage.getItem('NUA')
+
+      if (storedNUA) {
+        try {
+          this.NUA = storedNUA
+          const apiUrl = `http://localhost:4000/api/historial/conductor/${this.NUA}`
+          const response = await axios.get(apiUrl)
+          this.historialItemsConductor = response.data.body
+            .filter(item => item.via_activo === 0)
+            .map(item => ({
+              ...item,
+              via_fecha_hora: new Date(item.via_fecha_hora).toLocaleDateString()
+            }))
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Error al obtener datos del historial:', error)
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('No se pudo recuperar el NUA del almacenamiento local')
+      }
+    },
+
+    async fetchHistorialDataPasajero () {
+      const storedNUA = localStorage.getItem('NUA')
+
+      if (storedNUA) {
+        try {
+          this.NUA = storedNUA
+          const apiUrl = `http://localhost:4000/api/historial/pasajero/${this.NUA}`
+          const response = await axios.get(apiUrl)
+          this.historialItemsPasajero = response.data.body.map(item => ({
             ...item,
-            Via_Horario: new Date(item.Via_Horario).toLocaleDateString()
+            via_fecha_hora: new Date(item.via_fecha_hora).toLocaleDateString()
           }))
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error('Error al obtener datos del historial:', error)
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('No se pudo recuperar el NUA del almacenamiento local')
+      }
+    },
+
+    async fetchUserData () {
+      const storedNUA = localStorage.getItem('NUA')
+      if (storedNUA) {
+        try {
+          this.NUA = storedNUA
+          const apiUrl = `http://localhost:4000/api/usuarios/${this.NUA}`
+          const response = await axios.get(apiUrl)
+          const user = response.data.body
+          // Establecer esConductor según el valor de Usu_Tipo
+          this.esConductor = (user[0].Usu_Tipo === 'estudiante_con_vehiculo')
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Error al obtener datos del usuario:', error)
         }
       } else {
         // eslint-disable-next-line no-console
@@ -232,20 +497,23 @@ export default {
       }
       return stars
     },
+
     ver_cuenta () {
-      const NUA = this.$route.query.NUA // este valor se obtiene desde el LOGIN
+      const NUA = this.$route.query.NUA
       this.$router.push({
         path: '/principal/ver_cuenta/',
         query: { NUA }
       })
     },
+
     rutaMenu () {
-      const NUA = this.$route.query.NUA // este valor se obtiene desde el LOGIN
+      const NUA = this.$route.query.NUA
       this.$router.push({
         path: '/principal/',
         query: { NUA }
       })
     },
+
     rutaBusqueda () {
       const NUA = this.$route.query.NUA
       this.$router.push({
@@ -253,10 +521,9 @@ export default {
         query: { NUA }
       })
     },
+
     cerrar_sesión () {
-    // Eliminar el NUA del almacenamiento local
       localStorage.removeItem('NUA')
-      // Redirigir a la página de inicio de sesión
       this.$router.push('/')
     },
     goCrearViaje () {
@@ -274,9 +541,6 @@ export default {
 
 .bg-gradient {
   background-image: linear-gradient(135deg, #576cb9, #343c61);
-  /* Adjust the angle and colors as needed */
-  /* You can also use rgba values for more control */
-  /* Example: background-image: linear-gradient(135deg, rgba(95, 190, 115, 1), rgba(103, 190, 96, 1)); */
 }
 
 </style>
