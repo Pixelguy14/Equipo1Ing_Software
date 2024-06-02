@@ -141,15 +141,67 @@ function todos_los_viajes(tabla) {
     })
 }
 
+function viajes_conductor(via_con_usu_NUA) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`SELECT * FROM viajes WHERE via_con_usu_NUA = ${via_con_usu_NUA}`, (error,result)=>{
+            if(error) return reject(error);
+            resolve(result);
+        })
+    })
+}
+
+function eliminar_viaje(via_Id) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`DELETE FROM viajes WHERE via_Id = ${via_Id}`, (error,result)=>{
+            if(error) return reject(error);
+            resolve(result);
+        })
+    })
+}
+
 // Historial
-function historial (Cal_Califica_Usu_NUA) {
+function historialConductor (Cal_Califica_Usu_NUA) {
     return new Promise((resolve, reject) => {
         const query = `
-        SELECT viajes.via_fecha_hora, calificaciones.Cal_Califica_Usu_NUA, viajes.via_origen, viajes.via_costo, calificaciones.Cal_Calificacion
+        SELECT viajes.via_fecha_hora, calificaciones.Cal_Califica_Usu_NUA, viajes.via_origen, viajes.via_destino, viajes.via_costo, calificaciones.Cal_Calificacion, viajes.via_activo
         FROM viajes
         INNER JOIN calificaciones ON viajes.via_Id = calificaciones.Cal_Via_Id
         WHERE viajes.via_con_usu_NUA = ${Cal_Califica_Usu_NUA}`;
 
+        conexion.query(query, (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+function historialPasajero (Cal_Califica_Usu_NUA) {
+    return new Promise((resolve, reject) => {
+        const query = `
+        SELECT viajes.via_fecha_hora, calificaciones.Cal_Calificado_Usu_NUA, viajes.via_origen, viajes.via_destino, viajes.via_costo, calificaciones.Cal_Calificacion
+        FROM viajes
+        INNER JOIN calificaciones ON viajes.via_Id = calificaciones.Cal_Via_Id
+        WHERE calificaciones.Cal_Califica_Usu_NUA = ${Cal_Califica_Usu_NUA}`;
+
+        conexion.query(query, (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+function actualizarViajeStatus (via_Id) {
+    return new Promise((resolve, reject) => {
+        const query = `
+        UPDATE viajes
+        SET via_activo = 0
+        WHERE via_Id = ${via_Id}`;
         conexion.query(query, (error, result) => {
             if (error) {
                 reject(error);
@@ -174,5 +226,10 @@ module.exports = {
     /*iniciar_sesion,*/
     un_Usuario_Calificacion,
     todos_los_viajes,
-    historial
+    viajes_conductor,
+    eliminar_viaje,
+    //Historial
+    historialConductor,
+    historialPasajero,
+    actualizarViajeStatus
 }
