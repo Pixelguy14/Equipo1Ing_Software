@@ -176,7 +176,7 @@ export default {
       punto_encuentro: null,
       espacios_disponibles: null,
       costo_viaje: null,
-      nua: '783246',
+      nua: this.$route.query.NUA,
       nEspacios: [
         { espacio: '1' },
         { espacio: '2' },
@@ -238,35 +238,25 @@ export default {
     async crearViaje () {
       // eslint-disable-next-line no-console
       console.log('Creando viaje...')
-      try {
-        await axios.post('http://localhost:4000/api/viajes/registrarViaje', {
-          /*
-            via_con_usu_NUA
-            via_fecha_hora
-            via_origen
-            via_destino
-            via_lugares_pasada
-            via_esp_disp
-            via_costo
-          */
-          via_con_usu_NUA: this.nua,
-          via_fecha_hora: this.fecha + ' ' + this.hora + ':00',
-          via_origen: this.origen,
-          via_destino: this.destino,
-          via_lugares_pasada: this.punto_encuentro,
-          via_esp_disp: this.espacios_disponibles,
-          via_costo: this.costo_viaje
-        })
-      } catch (err) {
+      if (this.origen === null || this.destino === null || this.fecha === null || this.hora === null || this.punto_encuentro === null || this.espacios_disponibles === null || this.costo_viaje === null) {
         // eslint-disable-next-line no-console
-        console.log(err)
+        console.log('Faltan campos por llenar')
+      } else {
+        try {
+          await axios.post('http://localhost:4000/api/viajes/registrarViaje', {
+            via_con_usu_NUA: this.nua,
+            via_fecha_hora: this.fecha + ' ' + this.hora + ':00',
+            via_origen: this.origen,
+            via_destino: this.destino,
+            via_lugares_pasada: this.punto_encuentro,
+            via_esp_disp: this.espacios_disponibles,
+            via_costo: this.costo_viaje
+          })
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.log(err)
+        }
       }
-      /* console.log('Origen:', this.origen)
-      console.log('Destino:', this.destino)
-      console.log('Fecha:', this.fecha)
-      console.log('Hora:', this.hora)
-      console.log('Punto de encuentro:', this.punto_encuentro)
-      console.log('Espacios disponibles:', this.espacios_disponibles) */
     },
     mostrarTodoslosCampos () {
       // eslint-disable-next-line no-console
@@ -285,6 +275,8 @@ export default {
       console.log('Espacios disponibles:', this.espacios_disponibles)
       // eslint-disable-next-line no-console
       console.log('Costo por viaje:', this.costo_viaje)
+      // eslint-disable-next-line no-console
+      console.log('NUA del usaurio por viaje:', this.nua)
     }
   }
 }
@@ -305,7 +297,7 @@ export default {
 }
 
 .car-news {
-  background-image: url('./static/img_cinturon.jpg');
+  background-image: url('./static/img_objetos.jpg');
   background-size: cover; /* Esto hará que la imagen de fondo cubra todo el v-card */
   background-position: center;
   /* border-radius: 24px; */
