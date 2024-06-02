@@ -271,13 +271,11 @@ export default {
   font-weight: bold;
   font-family: Source Sans Pro;
 }
-<<<<<<< HEAD
-=======
+
 .bg-gradient {
   background-image: linear-gradient(135deg, #576cb9, #343c61);
   /* Adjust the angle and colors as needed */
   /* You can also use rgba values for more control */
   /* Example: background-image: linear-gradient(135deg, rgba(95, 190, 115, 1), rgba(103, 190, 96, 1)); */
 }
->>>>>>> main
 </style>
