@@ -87,6 +87,10 @@ function un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA){
 function todos_los_viajes(tabla){
     return db.todos_los_viajes(tabla)
 }
+
+function registrar_viaje(tabla, data){
+    return db.registrar_viaje(tabla, data)
+}
   
 //Historial
 function historial (Cal_Califica_Usu_NUA) {
@@ -108,5 +112,6 @@ module.exports = {
     un_Usuario_Calificacion,
     un_Usuario_Calificacion,
     todos_los_viajes,
+    registrar_viaje,
     historial,
 }

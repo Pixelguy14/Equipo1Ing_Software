@@ -34,6 +34,17 @@
         color="error"
         class="fuente"
         style="color: white;margin-right: 1%;"
+        @click="goCrearViaje()"
+      >
+        Crear Viaje
+      </v-btn>
+      <v-btn
+        rounded
+        x-large
+        elevation="0"
+        color="error"
+        class="fuente"
+        style="color: white;margin-right: 1%;"
         @click="cardCierraSesión = true"
       >
         Cerrar Sesión
@@ -247,6 +258,9 @@ export default {
       localStorage.removeItem('NUA')
       // Redirigir a la página de inicio de sesión
       this.$router.push('/')
+    },
+    goCrearViaje () {
+      this.$router.push('/principal/crear_viaje')
     }
   }
 }
@@ -257,10 +271,12 @@ export default {
   font-weight: bold;
   font-family: Source Sans Pro;
 }
+
 .bg-gradient {
   background-image: linear-gradient(135deg, #576cb9, #343c61);
   /* Adjust the angle and colors as needed */
   /* You can also use rgba values for more control */
   /* Example: background-image: linear-gradient(135deg, rgba(95, 190, 115, 1), rgba(103, 190, 96, 1)); */
 }
+
 </style>

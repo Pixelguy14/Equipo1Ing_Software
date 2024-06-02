@@ -2,32 +2,6 @@
   <v-row>
     <!-- seccion de busqueda -->
     <v-col cols="6">
-      <v-text-field>
-        <template #prepend>
-          <v-icon>mdi-magnify</v-icon>
-        </template>
-      </v-text-field>
-      <!-- Filtros de busqueda -->
-      <v-container>
-        <v-sheet class="mx-auto" max-width="600">
-          <v-slide-group show-arrows>
-            <v-slide-group-item
-              v-for="n in 25"
-              :key="n"
-              v-slot="{ isSelected, toggle }"
-            >
-              <v-btn
-                :color="isSelected ? 'primary' : undefined"
-                class="ma-2"
-                rounded
-                @click="toggle"
-              >
-                Options {{ n }}
-              </v-btn>
-            </v-slide-group-item>
-          </v-slide-group>
-        </v-sheet>
-      </v-container>
       <!-- viajes disponibles -->
       <v-card-title class="title-busqueda" style="color: #717171;">
         viajes disponibles
@@ -36,7 +10,7 @@
       <v-container>
         <!-- Lugares de origen y destino -->
         <v-row>
-          <v-col cols="6">
+          <v-col cols="4">
             <v-select
               v-model="origen"
               :items="municipios"
@@ -46,7 +20,7 @@
               outlined
             />
           </v-col>
-          <v-col cols="6">
+          <v-col cols="4">
             <v-select
               v-model="destino"
               :items="municipios"
