@@ -2,6 +2,11 @@
   <v-row class="mx-auto">
     <v-card class="pa-6 rounded-xxl my-5 " max-width="800">
       <v-card-title class="headline d-flex justify-center">
+        <v-avatar size="40">
+          <v-icon>
+            mdi-account-plus
+          </v-icon>
+        </v-avatar>
         Registrate
       </v-card-title>
       <v-sheet class="mx-auto" width="300">
@@ -12,6 +17,8 @@
             maxlength="100"
             :rules="necesario"
             label="Correo Institucional"
+            :error-messages="ErrorSC"
+            @keydown="restrictSpecialCharacters"
           />
 
           <v-text-field
@@ -19,6 +26,8 @@
             :rules="necesario"
             maxlength="6"
             label="NUA"
+            :error-messages="ErrorC"
+            @keydown="restrictCharacters"
           />
 
           <v-text-field
@@ -26,6 +35,8 @@
             :rules="necesario"
             maxlength="20"
             label="Nombre"
+            :error-messages="ErrorSC"
+            @keydown="restrictSpecialCharacters"
           />
 
           <v-row>
@@ -36,6 +47,8 @@
                 :rules="necesario"
                 label="Apellido Paterno"
                 class="w-50"
+                :error-messages="ErrorSC"
+                @keydown="restrictSpecialCharacters"
               />
             </v-col>
             <v-col cols="6">
@@ -44,6 +57,8 @@
                 maxlength="20"
                 label="Apellido Materno"
                 class="w-50"
+                :error-messages="ErrorSC"
+                @keydown="restrictSpecialCharacters"
               />
             </v-col>
           </v-row>
@@ -54,6 +69,8 @@
             maxlength="255"
             :rules="passwords"
             label="Contraseña"
+            :error-messages="ErrorSC"
+            @keydown="restrictSpecialCharacters"
           />
           <v-row class="my-3">
             <v-col cols="6">
@@ -90,6 +107,8 @@ export default {
     ape_mat: '',
     password: '',
     usu_tipo: '',
+    ErrorSC: '',
+    ErrorC: '',
     necesario: [
       (value) => {
         if (value?.length > 0) { return true }
@@ -125,7 +144,7 @@ export default {
         })
         if (this.usu_tipo === 'estudiante_con_vehiculo') {
           this.$router.push({
-            path: '/principal/reg_vehiculo/',
+            path: '/reg_vehiculo/',
             query: { NUA }
           }) // redireccionamiento
         } else {
@@ -137,6 +156,32 @@ export default {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err)
+      }
+    },
+    restrictSpecialCharacters (event) {
+      // expresion regular que restringe caracteres especiales excepto la ñ
+      const regex = /[^A-Za-z0-9ñÑ@._]/g
+      if (regex.test(event.key)) {
+        event.preventDefault()
+        this.ErrorSC = 'No se permiten los caracteres especiales'
+      } else {
+        this.ErrorSC = ''
+      }
+    },
+    restrictCharacters (event) {
+      // expresion regular que restringe a solo numeros
+      const regex = /[^0-9]/g
+      if (regex.test(event.key) &&
+          event.keyCode !== 8 &&
+          event.keyCode !== 13 &&
+          event.keyCode !== 16 &&
+          event.keyCode !== 9 &&
+          event.keyCode !== 37 &&
+          event.keyCode !== 39) {
+        event.preventDefault()
+        this.ErrorC = 'Solo se permiten numeros'
+      } else {
+        this.ErrorC = ''
       }
     }
   }

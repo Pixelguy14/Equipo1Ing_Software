@@ -2,6 +2,11 @@
   <v-row class="d-flex justify-center">
     <v-card class="pa-6 rounded-xxl my-5" max-width="800">
       <v-card-title class="headline d-flex justify-center">
+        <v-avatar size="40">
+          <v-icon>
+            mdi-car
+          </v-icon>
+        </v-avatar>
         Ver Vehiculo
       </v-card-title>
       <v-sheet class="mx-auto" width="300">
@@ -35,6 +40,8 @@
             max="2025"
             :readonly="isReadOnly"
             :append-icon="icono"
+            :error-messages="ErrorC"
+            @keydown="restrictCharacters"
           />
           <!--<v-text-field
           v-model="userInput2"
@@ -53,6 +60,8 @@
             max="9"
             :readonly="isReadOnly"
             :append-icon="icono"
+            :error-messages="ErrorC"
+            @keydown="restrictCharacters"
           />
           <v-select
             v-model="car_modelo"
@@ -62,6 +71,8 @@
             placeholder="Selecciona un modelo"
             :readonly="isReadOnly"
             :append-icon="icono"
+            :error-messages="ErrorSC"
+            @keydown="restrictSpecialCharacters"
           />
           <v-text-field
             v-model="car_color"
@@ -72,6 +83,8 @@
             label="Color del Vehiculo"
             :readonly="isReadOnly"
             :append-icon="icono"
+            :error-messages="ErrorSC"
+            @keydown="restrictSpecialCharacters"
           />
           <v-text-field
             v-model="car_placas"
@@ -82,6 +95,8 @@
             label="Placas del Vehiculo"
             :readonly="isReadOnly"
             :append-icon="icono"
+            :error-messages="ErrorSC"
+            @keydown="restrictSpecialCharacters"
           />
         </v-card-text>
         <v-card-actions>
@@ -139,10 +154,10 @@
               </v-btn>
             </v-col>
             <div v-if="mostrarpopup" class="popup">
-              <div class="contenido-popup">
-                <h2 class="fuente">
+              <v-card class="contenido-popup">
+                <v-card-title class="fuente">
                   Esta accion no se puede revertir!
-                </h2>
+                </v-card-title>
                 <v-btn
                   rounded
                   x-medium
@@ -157,13 +172,12 @@
                   rounded
                   x-medium
                   elevation="1"
-                  color="white"
                   class="fuente"
                   @click="mostrarpopup = false"
                 >
                   Cancelar
                 </v-btn>
-              </div>
+              </v-card>
             </div>
           </v-row>
         </v-card-actions>
@@ -202,7 +216,9 @@ export default {
       mostrarpopup: false,
       isReadOnly: true,
       icono: 'mdi-lock',
-      car_id: ''
+      car_id: '',
+      ErrorSC: '',
+      ErrorC: ''
     }
   },
   created () {
@@ -251,7 +267,7 @@ export default {
         console.log(err)
         const NUA = this.car_usu_nua
         this.$router.push({
-          path: '/principal/reg_vehiculo/',
+          path: '/reg_vehiculo/',
           query: { NUA }
         }) // redireccionamiento si no tienes vehiculo.
       }
@@ -289,6 +305,7 @@ export default {
       this.Vehiculo_id()
     },
     async borrar_vehiculo () {
+      const NUA = this.car_usu_nua
       try {
         await axios.delete(
           `http://localhost:4000/api/vehiculos/${this.car_usu_nua}`
@@ -297,7 +314,36 @@ export default {
         // eslint-disable-next-line no-console
         console.log(err)
       }
-      this.$router.push('/principal/ver_cuenta/') // redireccionamiento
+      this.$router.push({
+        path: '/principal/ver_cuenta/',
+        query: { NUA }
+      }) // redireccionamiento
+    },
+    restrictSpecialCharacters (event) {
+      // expresion regular que restringe caracteres especiales excepto la ñ
+      const regex = /[^A-Za-z0-9ñÑ@._]/g
+      if (regex.test(event.key)) {
+        event.preventDefault()
+        this.ErrorSC = 'No se permiten los caracteres especiales'
+      } else {
+        this.ErrorSC = ''
+      }
+    },
+    restrictCharacters (event) {
+      // expresion regular que restringe a solo numeros
+      const regex = /[^0-9]/g
+      if (regex.test(event.key) &&
+          event.keyCode !== 8 &&
+          event.keyCode !== 13 &&
+          event.keyCode !== 16 &&
+          event.keyCode !== 9 &&
+          event.keyCode !== 37 &&
+          event.keyCode !== 39) {
+        event.preventDefault()
+        this.ErrorC = 'Solo se permiten numeros'
+      } else {
+        this.ErrorC = ''
+      }
     }
   }
 }

@@ -1,6 +1,11 @@
 <template>
   <v-app app>
-    <v-app-bar :clipped-left="clipped" fixed app elevation="0" color="black">
+    <v-app-bar :clipped-left="clipped" fixed app elevation="0" class="bg-gradient">
+      <v-img
+        src="https://cdn-icons-png.flaticon.com/512/5509/5509636.png"
+        alt="Circular Image"
+        style="max-height: 40px; max-width: 40px;"
+      />
       <v-toolbar-title style="color: white;" class="fuente">
         {{ title }}
       </v-toolbar-title>
@@ -79,7 +84,7 @@
     </v-btn>
     <v-dialog v-model="abrirHistorial" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
-        <v-app-bar :clipped-left="clipped" fixed app elevation="0" color="black">
+        <v-app-bar :clipped-left="clipped" fixed app elevation="0" class="bg-gradient">
           <v-btn icon dark @click="abrirHistorial = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -266,4 +271,13 @@ export default {
   font-weight: bold;
   font-family: Source Sans Pro;
 }
+<<<<<<< HEAD
+=======
+.bg-gradient {
+  background-image: linear-gradient(135deg, #576cb9, #343c61);
+  /* Adjust the angle and colors as needed */
+  /* You can also use rgba values for more control */
+  /* Example: background-image: linear-gradient(135deg, rgba(95, 190, 115, 1), rgba(103, 190, 96, 1)); */
+}
+>>>>>>> main
 </style>

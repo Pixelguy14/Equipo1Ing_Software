@@ -2,6 +2,11 @@
   <v-row class="d-flex justify-center fuente">
     <v-card class="pa-6 rounded-xxl my-5" max-width="800">
       <v-card-title class="headline d-flex justify-center">
+        <v-avatar size="40">
+          <v-icon>
+            mdi-account-circle
+          </v-icon>
+        </v-avatar>
         Ver Cuenta
       </v-card-title>
       <v-sheet class="mx-auto" width="300">
@@ -23,6 +28,8 @@
             label="Correo Institucional"
             :readonly="isReadOnly"
             :append-icon="icono"
+            :error-messages="ErrorSC"
+            @keydown="restrictSpecialCharacters"
           />
 
           <v-text-field
@@ -32,6 +39,8 @@
             label="Nombre"
             :readonly="isReadOnly"
             :append-icon="icono"
+            :error-messages="ErrorSC"
+            @keydown="restrictSpecialCharacters"
           />
 
           <v-row>
@@ -44,6 +53,8 @@
                 class="w-50"
                 :readonly="isReadOnly"
                 :append-icon="icono"
+                :error-messages="ErrorSC"
+                @keydown="restrictSpecialCharacters"
               />
             </v-col>
             <v-col cols="6">
@@ -54,6 +65,8 @@
                 class="w-50"
                 :readonly="isReadOnly"
                 :append-icon="icono"
+                :error-messages="ErrorSC"
+                @keydown="restrictSpecialCharacters"
               />
             </v-col>
           </v-row>
@@ -66,6 +79,8 @@
             label="Contraseña"
             :readonly="isReadOnly"
             :append-icon="icono"
+            :error-messages="ErrorSC"
+            @keydown="restrictSpecialCharacters"
           />
 
           <!--<v-text-field
@@ -161,9 +176,7 @@
                   rounded
                   x-medium
                   elevation="1"
-                  color="white"
                   class="fuente"
-                  style="color: black;"
                   @click="mostrarpopup = false"
                 >
                   Cancelar
@@ -199,6 +212,8 @@ export default {
     icono: 'mdi-lock',
     mostrarpopup: false,
     btn_vehiculo: false,
+    ErrorSC: '',
+    ErrorC: '',
     necesario: [
       (value) => {
         if (value?.length > 0) { return true }
@@ -308,6 +323,32 @@ export default {
         path: '/principal/ver_vehiculo/',
         query: { NUA }
       }) // redireccionamiento
+    },
+    restrictSpecialCharacters (event) {
+      // expresion regular que restringe caracteres especiales excepto la ñ
+      const regex = /[^A-Za-z0-9ñÑ@._]/g
+      if (regex.test(event.key)) {
+        event.preventDefault()
+        this.ErrorSC = 'No se permiten los caracteres especiales'
+      } else {
+        this.ErrorSC = ''
+      }
+    },
+    restrictCharacters (event) {
+      // expresion regular que restringe a solo numeros
+      const regex = /[^0-9]/g
+      if (regex.test(event.key) &&
+          event.keyCode !== 8 &&
+          event.keyCode !== 13 &&
+          event.keyCode !== 16 &&
+          event.keyCode !== 9 &&
+          event.keyCode !== 37 &&
+          event.keyCode !== 39) {
+        event.preventDefault()
+        this.ErrorC = 'Solo se permiten numeros'
+      } else {
+        this.ErrorC = ''
+      }
     }
   }
 }
