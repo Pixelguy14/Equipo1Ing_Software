@@ -260,7 +260,14 @@ export default {
       this.$router.push('/')
     },
     goCrearViaje () {
-      this.$router.push('/principal/crear_viaje')
+      // extraer el NUA de la URL
+      const NUA = this.$route.query.NUA
+      // eslint-disable-next-line no-console
+      console.log('NUA', NUA)
+      this.$router.push({
+        path: '/principal/crear_viaje/',
+        query: { NUA }
+      })
     }
   }
 }
