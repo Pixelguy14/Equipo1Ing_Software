@@ -140,6 +140,13 @@ function todos_los_viajes(tabla) {
         })
     })
 }
+function registrar_viaje(tabla, data) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`INSERT INTO ${tabla} SET ?`, data , (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })
+}
 
 // Historial
 function historial (Cal_Califica_Usu_NUA) {
@@ -174,5 +181,6 @@ module.exports = {
     /*iniciar_sesion,*/
     un_Usuario_Calificacion,
     todos_los_viajes,
+    registrar_viaje,
     historial
 }
