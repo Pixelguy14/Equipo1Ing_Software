@@ -86,6 +86,11 @@ function todos_los_viajes(tabla){
     return db.todos_los_viajes(tabla)
 }
 
+function registrar_viaje(tabla, data){
+    return db.registrar_viaje(tabla, data)
+}
+  
+
 function viajes_conductor(via_con_usu_NUA){
     return db.viajes_conductor(via_con_usu_NUA)
 }
@@ -121,6 +126,7 @@ module.exports = {
     un_Usuario_Calificacion,
     un_Usuario_Calificacion,
     todos_los_viajes,
+    registrar_viaje,
     viajes_conductor,
     eliminar_viaje,
     historialConductor,

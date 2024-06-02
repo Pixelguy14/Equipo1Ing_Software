@@ -28,6 +28,18 @@
       </v-btn>
       <v-spacer />
       <v-btn
+        v-if="esConductor == true"
+        rounded
+        x-large
+        elevation="0"
+        color="error"
+        class="fuente"
+        style="color: white;margin-right: 1%;"
+        @click="goCrearViaje()"
+      >
+        Crear Viaje
+      </v-btn>
+      <v-btn
         rounded
         x-large
         elevation="0"
@@ -90,6 +102,7 @@
           :headers="headersConductorViajes"
           :items="viajesItemsConductor"
           :items-per-page="5"
+          class="fuente"
           hide-default-footer
           style="margin-top: 60px; max-width: 100% !important;"
         >
@@ -120,6 +133,7 @@
           :headers="headersConductor"
           :items="historialItemsConductor"
           :items-per-page="5"
+          class="fuente"
           hide-default-footer
           style="margin-top: 20px; max-width: 100% !important;"
         >
@@ -511,6 +525,9 @@ export default {
     cerrar_sesión () {
       localStorage.removeItem('NUA')
       this.$router.push('/')
+    },
+    goCrearViaje () {
+      this.$router.push('/principal/crear_viaje')
     }
   }
 }
@@ -521,7 +538,9 @@ export default {
   font-weight: bold;
   font-family: Source Sans Pro;
 }
+
 .bg-gradient {
   background-image: linear-gradient(135deg, #576cb9, #343c61);
 }
+
 </style>

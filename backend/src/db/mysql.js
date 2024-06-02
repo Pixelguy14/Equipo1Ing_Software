@@ -140,6 +140,13 @@ function todos_los_viajes(tabla) {
         })
     })
 }
+function registrar_viaje(tabla, data) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`INSERT INTO ${tabla} SET ?`, data , (error,result)=>{
+            return error ? reject(error) : resolve(result);
+        })
+    })
+}
 
 function viajes_conductor(via_con_usu_NUA) {
     return new Promise((resolve, reject) =>{
@@ -226,6 +233,7 @@ module.exports = {
     /*iniciar_sesion,*/
     un_Usuario_Calificacion,
     todos_los_viajes,
+    registrar_viaje,
     viajes_conductor,
     eliminar_viaje,
     //Historial
