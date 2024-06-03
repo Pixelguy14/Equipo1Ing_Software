@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="7">
-      <v-container grid-list-xs>
+      <v-container grid-list-xs class="cards-scroll">
         <v-card-title primary-title class="text-h4 font-weight-bold">
           Crar nuevo viaje
         </v-card-title>
@@ -12,9 +12,9 @@
         </v-container>
         <!-- Card origen y destino -->
         <v-container>
-          <v-card class="card-style" style="background-color: #F6F6F8;">
-            <v-row>
-              <v-col cols="5">
+          <v-card style="background-color: #F6F6F8;" class="py-4 px-4">
+            <v-row align-center justify="center">
+              <v-col cols="5" class="d-flex justify-center flex-column align-center">
                 <v-select
                   v-model="origen"
                   :items="municipios"
@@ -24,12 +24,13 @@
                   outlined
                   item-color="blue"
                   background-color="white"
+                  class="rounded-xl"
                 />
               </v-col>
-              <v-col cols="2">
+              <v-col cols="2" class="d-flex justify-center align-center">
                 <v-icon>mdi-car-arrow-right</v-icon>
               </v-col>
-              <v-col cols="5">
+              <v-col cols="5" class="d-flex justify-center">
                 <v-select
                   v-model="destino"
                   :items="municipios"
@@ -39,34 +40,38 @@
                   outlined
                   item-color="blue"
                   background-color="white"
+                  class="rounded-xl"
                 />
               </v-col>
             </v-row>
           </v-card>
         </v-container>
+
         <!-- Hora y fecha -->
         <v-container>
-          <v-card style="background-color: #F6F6F8;">
-            <v-row>
-              <v-col cols="5">
+          <v-card style="background-color: #F6F6F8;" class="py-4 px-4">
+            <v-row class="d-flex">
+              <v-col col="5">
                 <v-text-field
                   v-model="fecha"
                   label="Fecha de salida"
                   type="date"
                   outlined
                   background-color="white"
+                  class="fecha-select rounded-xl"
                 />
               </v-col>
-              <v-col cols="2">
-                <p>y</p>
+              <v-col cols="2" class="d-flex justify-center align-center">
+                y
               </v-col>
-              <v-col cols="5">
+              <v-col col="5">
                 <v-text-field
                   v-model="hora"
                   label="Hora de salida"
                   type="time"
                   outlined
                   background-color="white"
+                  class="rounded-xl"
                 />
               </v-col>
             </v-row>
@@ -74,7 +79,7 @@
         </v-container>
         <!-- Punto de encuentro -->
         <v-container grid-list-xs>
-          <v-card style="background-color: #F6F6F8;">
+          <v-card style="background-color: #F6F6F8;" class="py-2">
             <v-card-title primary-title class="px-6">
               Puntos de encuentro
             </v-card-title>
@@ -90,15 +95,15 @@
         <v-container grid-list-xs>
           <v-card style="background-color: #F6F6F8;">
             <v-row style="display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; align-content: center;">
-              <v-col cols="1">
+              <v-col cols="2 d-flex justify-end">
                 <v-icon>mdi-account-group</v-icon>
               </v-col>
-              <v-col cols="7">
+              <v-col cols="6 d-flex justify-start">
                 <v-card-text>
                   Número de espacios disponibles:
                 </v-card-text>
               </v-col>
-              <v-col cols="4">
+              <v-col cols="4" class="mr-4 d-flex justify">
                 <v-select
                   v-model="espacios_disponibles"
                   :items="nEspacios"
@@ -107,32 +112,34 @@
                   item-value="espacio"
                   outlined
                   background-color="white"
+                  class="rounded-xl d-flex justify-center align-center align-self-center"
                 />
               </v-col>
             </v-row>
           </v-card>
         </v-container>
         <!-- Card costo del viaje -->
-        <v-container grid-list-xs>
+        <v-container grid-list-xs class="mt-4">
           <v-form fast-fail @submit.prevent>
             <v-card style="background-color: #F6F6F8;">
               <v-row style="display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; align-content: center;">
-                <v-col cols="1" display-3>
+                <v-col cols="2 d-flex justify-end">
                   <v-icon>mdi-cash</v-icon>
                 </v-col>
-                <v-col cols="7">
+                <v-col cols="6 d-flex justify-start">
                   <v-card-text type="money">
                     Costo del viaje por pasajero:
                   </v-card-text>
                 </v-col>
                 <v-col cols="4">
-                  <v-card class="px-4 mx-4">
+                  <v-card class="px-4 mx-4 rounded-xl">
                     <v-text-field
                       v-model="costo_viaje"
                       type="text"
+                      prefix="$"
                       maxlength="6"
                       :rules="necesario"
-                      label="$0.00"
+                      label="MXN"
                       variant="outlined"
                     />
                   </v-card>
@@ -142,9 +149,15 @@
           </v-form>
         </v-container>
         <!-- Boton de crear viaje -->
-        <v-container grid-list-xs>
-          <v-btn color="primary" dark @click="crearViaje()">
-            Crear viaje
+        <v-container grid-list-xs class="d-flex justify-center mt-6">
+          <v-btn
+            color="#A2E38C"
+            class="rounded-xl"
+            width="80%"
+            height="50px"
+            @click="crearViaje()"
+          >
+            ¡Crear viaje!
           </v-btn>
         </v-container>
       </v-container>
@@ -284,6 +297,11 @@ export default {
 
 <style>
 
+.cards-scroll {
+  overflow-y: auto;
+  height: 720px;
+}
+
 .color_subtitle {
   color: #717171;
 }
@@ -294,6 +312,14 @@ export default {
 
 .mi-select .v-select__selections .v-select__selection--comma {
   color: #FFFFFF;
+}
+
+.fecha-select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  align-content: center;
 }
 
 .car-news {
@@ -311,6 +337,20 @@ export default {
 
 .card-style {
   background-color: #F6F6F8;
+}
+
+.select-style {
+  background-color: #212529; /* Color de fondo oscuro */
+  color: white; /* Color de texto blanco */
+  border-radius: 25px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+.select-style .v-input__control {
+  color: white !important;
+}
+.icon-style {
+  font-size: 36px; /* Tamaño del icono */
+  color: #212529; /* Color del icono */
 }
 
 </style>
