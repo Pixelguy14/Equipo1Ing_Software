@@ -216,7 +216,7 @@
       </v-card>
     </v-dialog>
     <v-dialog v-model="showUpdate" width="400" persistent>
-      <v-card>
+      <v-card style="height: 156px;">
         <v-card-title>Terminar viaje</v-card-title>
         <v-card-text>
           ¿Estas Seguro de querer terminar el viaje?
