@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="7">
-      <v-container grid-list-xs class="cards-scroll">
+      <v-container grid-list-xs>
         <v-card-title primary-title class="text-h4 font-weight-bold">
           Crar nuevo viaje
         </v-card-title>
@@ -12,9 +12,9 @@
         </v-container>
         <!-- Card origen y destino -->
         <v-container>
-          <v-card style="background-color: #F6F6F8;" class="py-4 px-4">
-            <v-row align-center justify="center">
-              <v-col cols="5" class="d-flex justify-center flex-column align-center">
+          <v-card class="card-style">
+            <v-row>
+              <v-col cols="5">
                 <v-select
                   v-model="origen"
                   :items="municipios"
@@ -23,14 +23,12 @@
                   item-value="nombre"
                   outlined
                   item-color="blue"
-                  background-color="white"
-                  class="rounded-xl"
                 />
               </v-col>
-              <v-col cols="2" class="d-flex justify-center align-center">
+              <v-col cols="2">
                 <v-icon>mdi-car-arrow-right</v-icon>
               </v-col>
-              <v-col cols="5" class="d-flex justify-center">
+              <v-col cols="5">
                 <v-select
                   v-model="destino"
                   :items="municipios"
@@ -39,39 +37,32 @@
                   item-value="nombre"
                   outlined
                   item-color="blue"
-                  background-color="white"
-                  class="rounded-xl"
                 />
               </v-col>
             </v-row>
           </v-card>
         </v-container>
-
         <!-- Hora y fecha -->
         <v-container>
-          <v-card style="background-color: #F6F6F8;" class="py-4 px-4">
-            <v-row class="d-flex">
-              <v-col col="5">
+          <v-card>
+            <v-row>
+              <v-col cols="5">
                 <v-text-field
                   v-model="fecha"
                   label="Fecha de salida"
                   type="date"
                   outlined
-                  background-color="white"
-                  class="fecha-select rounded-xl"
                 />
               </v-col>
-              <v-col cols="2" class="d-flex justify-center align-center">
-                y
+              <v-col cols="2">
+                <p>y</p>
               </v-col>
-              <v-col col="5">
+              <v-col cols="5">
                 <v-text-field
                   v-model="hora"
                   label="Hora de salida"
                   type="time"
                   outlined
-                  background-color="white"
-                  class="rounded-xl"
                 />
               </v-col>
             </v-row>
@@ -79,7 +70,7 @@
         </v-container>
         <!-- Punto de encuentro -->
         <v-container grid-list-xs>
-          <v-card style="background-color: #F6F6F8;" class="py-2">
+          <v-card>
             <v-card-title primary-title class="px-6">
               Puntos de encuentro
             </v-card-title>
@@ -93,17 +84,17 @@
         </v-container>
         <!-- Numero de espacios disponibles -->
         <v-container grid-list-xs>
-          <v-card style="background-color: #F6F6F8;">
+          <v-card>
             <v-row style="display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; align-content: center;">
-              <v-col cols="2 d-flex justify-end">
+              <v-col cols="1">
                 <v-icon>mdi-account-group</v-icon>
               </v-col>
-              <v-col cols="6 d-flex justify-start">
+              <v-col cols="7">
                 <v-card-text>
                   Número de espacios disponibles:
                 </v-card-text>
               </v-col>
-              <v-col cols="4" class="mr-4 d-flex justify">
+              <v-col cols="4">
                 <v-select
                   v-model="espacios_disponibles"
                   :items="nEspacios"
@@ -111,35 +102,32 @@
                   item-text="espacio"
                   item-value="espacio"
                   outlined
-                  background-color="white"
-                  class="rounded-xl d-flex justify-center align-center align-self-center"
                 />
               </v-col>
             </v-row>
           </v-card>
         </v-container>
         <!-- Card costo del viaje -->
-        <v-container grid-list-xs class="mt-4">
+        <v-container grid-list-xs>
           <v-form fast-fail @submit.prevent>
-            <v-card style="background-color: #F6F6F8;">
+            <v-card>
               <v-row style="display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; align-content: center;">
-                <v-col cols="2 d-flex justify-end">
+                <v-col cols="1" display-3>
                   <v-icon>mdi-cash</v-icon>
                 </v-col>
-                <v-col cols="6 d-flex justify-start">
+                <v-col cols="7">
                   <v-card-text type="money">
                     Costo del viaje por pasajero:
                   </v-card-text>
                 </v-col>
                 <v-col cols="4">
-                  <v-card class="px-4 mx-4 rounded-xl">
+                  <v-card class="px-4 mx-4">
                     <v-text-field
                       v-model="costo_viaje"
                       type="text"
-                      prefix="$"
                       maxlength="6"
                       :rules="necesario"
-                      label="MXN"
+                      label="$0.00"
                       variant="outlined"
                     />
                   </v-card>
@@ -149,15 +137,9 @@
           </v-form>
         </v-container>
         <!-- Boton de crear viaje -->
-        <v-container grid-list-xs class="d-flex justify-center mt-6">
-          <v-btn
-            color="#A2E38C"
-            class="rounded-xl"
-            width="80%"
-            height="50px"
-            @click="crearViaje()"
-          >
-            ¡Crear viaje!
+        <v-container grid-list-xs>
+          <v-btn color="primary" dark @click="crearViaje()">
+            Crear viaje
           </v-btn>
         </v-container>
       </v-container>
@@ -189,7 +171,7 @@ export default {
       punto_encuentro: null,
       espacios_disponibles: null,
       costo_viaje: null,
-      nua: this.$route.query.NUA,
+      nua: '783246',
       nEspacios: [
         { espacio: '1' },
         { espacio: '2' },
@@ -251,25 +233,35 @@ export default {
     async crearViaje () {
       // eslint-disable-next-line no-console
       console.log('Creando viaje...')
-      if (this.origen === null || this.destino === null || this.fecha === null || this.hora === null || this.punto_encuentro === null || this.espacios_disponibles === null || this.costo_viaje === null) {
+      try {
+        await axios.post('http://localhost:4000/api/viajes/registrarViaje', {
+          /*
+            via_con_usu_NUA
+            via_fecha_hora
+            via_origen
+            via_destino
+            via_lugares_pasada
+            via_esp_disp
+            via_costo
+          */
+          via_con_usu_NUA: this.nua,
+          via_fecha_hora: this.fecha + ' ' + this.hora + ':00',
+          via_origen: this.origen,
+          via_destino: this.destino,
+          via_lugares_pasada: this.punto_encuentro,
+          via_esp_disp: this.espacios_disponibles,
+          via_costo: this.costo_viaje
+        })
+      } catch (err) {
         // eslint-disable-next-line no-console
-        console.log('Faltan campos por llenar')
-      } else {
-        try {
-          await axios.post('http://localhost:4000/api/viajes/registrarViaje', {
-            via_con_usu_NUA: this.nua,
-            via_fecha_hora: this.fecha + ' ' + this.hora + ':00',
-            via_origen: this.origen,
-            via_destino: this.destino,
-            via_lugares_pasada: this.punto_encuentro,
-            via_esp_disp: this.espacios_disponibles,
-            via_costo: this.costo_viaje
-          })
-        } catch (err) {
-          // eslint-disable-next-line no-console
-          console.log(err)
-        }
+        console.log(err)
       }
+      /* console.log('Origen:', this.origen)
+      console.log('Destino:', this.destino)
+      console.log('Fecha:', this.fecha)
+      console.log('Hora:', this.hora)
+      console.log('Punto de encuentro:', this.punto_encuentro)
+      console.log('Espacios disponibles:', this.espacios_disponibles) */
     },
     mostrarTodoslosCampos () {
       // eslint-disable-next-line no-console
@@ -288,19 +280,12 @@ export default {
       console.log('Espacios disponibles:', this.espacios_disponibles)
       // eslint-disable-next-line no-console
       console.log('Costo por viaje:', this.costo_viaje)
-      // eslint-disable-next-line no-console
-      console.log('NUA del usaurio por viaje:', this.nua)
     }
   }
 }
 </script>
 
 <style>
-
-.cards-scroll {
-  overflow-y: auto;
-  height: 720px;
-}
 
 .color_subtitle {
   color: #717171;
@@ -314,16 +299,8 @@ export default {
   color: #FFFFFF;
 }
 
-.fecha-select {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
-  align-content: center;
-}
-
 .car-news {
-  background-image: url('./static/img_objetos.jpg');
+  background-image: url('./static/img_cinturon.jpg');
   background-size: cover; /* Esto hará que la imagen de fondo cubra todo el v-card */
   background-position: center;
   /* border-radius: 24px; */
@@ -337,20 +314,6 @@ export default {
 
 .card-style {
   background-color: #F6F6F8;
-}
-
-.select-style {
-  background-color: #212529; /* Color de fondo oscuro */
-  color: white; /* Color de texto blanco */
-  border-radius: 25px; /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
-}
-.select-style .v-input__control {
-  color: white !important;
-}
-.icon-style {
-  font-size: 36px; /* Tamaño del icono */
-  color: #212529; /* Color del icono */
 }
 
 </style>
