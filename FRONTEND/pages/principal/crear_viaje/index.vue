@@ -3,7 +3,7 @@
     <v-col cols="7">
       <v-container grid-list-xs class="cards-scroll">
         <v-card-title primary-title class="text-h4 font-weight-bold">
-          Crar nuevo viaje
+          Crear nuevo viaje
         </v-card-title>
         <v-container grid-list-xs>
           <p class="text-disabled" style="color: #717171;">
@@ -79,7 +79,7 @@
             <v-card-title primary-title class="px-6">
               Puntos de encuentro
             </v-card-title>
-            <v-card-text class="px-6">
+            <v-card-text class="px-6 text-justify">
               Indica claramente los puntos de encuentro, paradas o lugares donde podrás recoger o dejar a tus compañeros de viaje. Ejemplo: Oxxo junto a la central de autobuses de Salamanca.
             </v-card-text>
             <v-card class="rounded-lg my-6 h-75 ma-5 px-6">
