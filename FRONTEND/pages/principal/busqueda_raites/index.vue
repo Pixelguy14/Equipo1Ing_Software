@@ -7,10 +7,10 @@
         viajes disponibles
       </v-card-title>
       <!-- filtros -->
-      <v-container>
+      <v-container class="d-flex">
         <!-- Lugares de origen y destino -->
         <v-row>
-          <v-col cols="4">
+          <v-col cols="6">
             <v-select
               v-model="origen"
               :items="municipios"
@@ -20,7 +20,7 @@
               outlined
             />
           </v-col>
-          <v-col cols="4">
+          <v-col cols="6">
             <v-select
               v-model="destino"
               :items="municipios"
@@ -29,50 +29,6 @@
               item-value="nombre"
               outlined
             />
-          </v-col>
-        </v-row>
-        <v-row justify="center">
-          <v-col cols="auto">
-            <v-btn
-              height="40"
-              min-width="100"
-              class="btn-filter"
-            >
-              Hoy
-            </v-btn>
-          </v-col>
-
-          <v-col cols="auto">
-            <v-btn
-              :ripple="false"
-              height="40"
-              min-width="100"
-              class="btn-filter"
-            >
-              Mañana
-            </v-btn>
-          </v-col>
-
-          <v-col cols="auto">
-            <v-btn
-              :ripple="false"
-              height="40"
-              min-width="100"
-              class="btn-filter"
-            >
-              11/05/2024
-            </v-btn>
-          </v-col>
-
-          <v-col cols="auto">
-            <v-btn
-              :ripple="false"
-              height="40"
-              min-width="100"
-              class="btn-filter"
-            >
-              12/05/2024
-            </v-btn>
           </v-col>
         </v-row>
       </v-container>
