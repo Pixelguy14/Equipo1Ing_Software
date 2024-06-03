@@ -130,12 +130,13 @@
                   <v-card class="px-4 mx-4 rounded-xl">
                     <v-text-field
                       v-model="costo_viaje"
-                      type="text"
+                      type="number"
+                      maxlength="4"
                       prefix="$"
-                      maxlength="6"
                       :rules="necesario"
                       label="MXN"
                       variant="outlined"
+                      @keydown="restrictCharacters"
                     />
                   </v-card>
                 </v-col>
@@ -156,6 +157,15 @@
             ¡Crear viaje!
           </v-btn>
         </v-container>
+        <!-- Snackbar -->
+        <v-snackbar
+          v-model="snackbar"
+          color="success"
+          :timeout="3000"
+        >
+          ¡Viaje registrado con éxito!
+        </v-snackbar>
+        <!-- ... -->
       </v-container>
     </v-col>
     <v-col cols="5">
@@ -178,6 +188,7 @@ export default {
 
   data () {
     return {
+      snackbar: false,
       origen: null,
       destino: null,
       fecha: null,
@@ -239,6 +250,13 @@ export default {
         { nombre: 'Villagrán' },
         { nombre: 'Xichú' },
         { nombre: 'Yuriria' }
+      ],
+      necesario: [
+        (value) => {
+          if (value?.length > 0) { return true }
+
+          return 'Es obligatorio llenar este campo'
+        }
       ]
     }
   },
@@ -261,6 +279,15 @@ export default {
             via_esp_disp: this.espacios_disponibles,
             via_costo: this.costo_viaje
           })
+          this.snackbar = true
+          // resetear campos
+          this.origen = null
+          this.destino = null
+          this.fecha = null
+          this.hora = null
+          this.punto_encuentro = null
+          this.espacios_disponibles = null
+          this.costo_viaje = null
         } catch (err) {
           // eslint-disable-next-line no-console
           console.log(err)
