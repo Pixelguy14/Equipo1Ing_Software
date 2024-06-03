@@ -97,7 +97,6 @@
         <!--Tabla para Conductores (Cambiar status de viajes)-->
         <v-data-table
           v-if="esConductor==true"
-          able
           elevation="0"
           :headers="headersConductorViajes"
           :items="viajesItemsConductor"
@@ -109,22 +108,41 @@
           <template #[`item.acciones`]="{ item }">
             <v-row>
               <v-col cols="6">
-                <v-btn icon color="warning" @click="cambiarStatusViaje(item.via_Id)">
-                  <v-icon>
-                    mdi-list-status
-                  </v-icon>
-                </v-btn>
+                <v-tooltip top color="success">
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      color="success"
+                      v-bind="attrs"
+                      @click="cambiarStatusViaje(item.via_Id)"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-list-status</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Concluir viaje</span>
+                </v-tooltip>
               </v-col>
               <v-col cols="6">
-                <v-btn icon color="error" @click="eliminarViaje(item)">
-                  <v-icon>
-                    mdi-delete
-                  </v-icon>
-                </v-btn>
+                <v-tooltip top color="error">
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      color="error"
+                      v-bind="attrs"
+                      @click="eliminarViaje(item)"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Cancelar viaje</span>
+                </v-tooltip>
               </v-col>
             </v-row>
           </template>
         </v-data-table>
+
         <!--Tabla para Conductores (Calificaciones)-->
         <v-data-table
           v-if="esConductor==true"
@@ -173,23 +191,23 @@
         </v-data-table>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="showDelete" width="400" persistent>
-      <v-card>
-        <v-card-title>Eliminar Viaje</v-card-title>
+    <v-dialog v-model="showDelete" width="400px" style="height: 156px;" persistent>
+      <v-card style="height: 156px;">
+        <v-card-title>Cancelar Viaje</v-card-title>
         <v-card-text>¿Estas seguro? Esta accion es irreversible</v-card-text>
         <v-card-actions>
           <v-row>
             <v-col cols="6">
               <v-btn block color="error" @click="borrar()">
                 <span style="color: white; text-transform: none;">
-                  Borrar
+                  Cancelar
                 </span>
               </v-btn>
             </v-col>
             <v-col cols="6">
               <v-btn block color="success" @click="showDelete = false">
                 <span style="color: white; text-transform: none;">
-                  Cancelar
+                  No cancelar
                 </span>
               </v-btn>
             </v-col>
@@ -199,7 +217,7 @@
     </v-dialog>
     <v-dialog v-model="showUpdate" width="400" persistent>
       <v-card>
-        <v-card-title>Modificar status del viaje</v-card-title>
+        <v-card-title>Terminar viaje</v-card-title>
         <v-card-text>
           ¿Estas Seguro de querer terminar el viaje?
         </v-card-text>
