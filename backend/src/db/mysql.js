@@ -205,31 +205,6 @@ function eliminar_viaje(via_Id) {
     })
 }
 
-async function reservar_viaje(data) {
-    try {
-        // Verificar si el usuario ya tiene una reserva para este viaje
-        const existeReserva = await verificarExistenciaReserva(data);
-        if (existeReserva) {
-            console.log("El usuario ya tiene una reserva para este viaje.");
-            return;
-        }
-        // Insertar la reserva en la base de datos
-        conexion.query(`
-            INSERT INTO reservas (Res_Usu_NUA, Res_via_id, Res_Num_Asientos)
-            VALUES (${data.Res_Usu_NUA}, ${data.Res_via_id}, ${data.Res_Num_Asientos})`, 
-            (error, result) => {
-                if (error) {
-                    console.error("Error al insertar la reserva:", error);
-                    return;
-                }
-                console.log("Reserva insertada con éxito. =>", result);
-            });
-
-    } catch (error) {
-        console.error("Error al insertar la reserva:", error);
-    }
-}
-
 function verificarExistenciaReserva(data) {
     return new Promise((resolve, reject) => {
         conexion.query(`
@@ -263,6 +238,41 @@ function historialConductor (Cal_Califica_Usu_NUA) {
         });
     });
 }
+
+//Reservar viajes
+function todos_reservas(tabla) {
+    return new Promise((resolve, reject) =>{
+        conexion.query(`SELECT * FROM ${tabla}`, (error,result)=>{
+            if(error) return reject(error);
+            resolve(result);
+        })
+    })
+}
+
+async function reservar_viaje(data) {
+    try {
+        // Verificar si el usuario ya tiene una reserva para este viaje
+        const existeReserva = await verificarExistenciaReserva(data);
+        if (existeReserva) {
+            console.log("El usuario ya tiene una reserva para este viaje.");
+            return;
+        }
+        // Insertar la reserva en la base de datos
+        conexion.query(`
+            INSERT INTO reservas (Res_Usu_NUA, Res_via_id, Res_Num_Asientos)
+            VALUES (${data.Res_Usu_NUA}, ${data.Res_via_id}, ${data.Res_Num_Asientos})`, 
+            (error, result) => {
+                if (error) {
+                    console.error("Error al insertar la reserva:", error);
+                    return;
+                }
+                console.log("Reserva insertada con éxito. =>", result);
+            });
+
+    } catch (error) {
+        console.error("Error al insertar la reserva:", error);
+    }
+}   
 
 function historialPasajero (Cal_Califica_Usu_NUA) {
     return new Promise((resolve, reject) => {
@@ -314,10 +324,11 @@ module.exports = {
     validar_Calificación,
     insertar_Calificación,
     todos_los_viajes,
+    todos_reservas,
+    reservar_viaje,
     registrar_viaje,
     viajes_conductor,
     eliminar_viaje,
-    reservar_viaje,
     verificarExistenciaReserva,
     //Historial
     historialConductor,

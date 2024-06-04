@@ -127,6 +127,11 @@ function actualizarViajeStatus (via_Id) {
     return db.actualizarViajeStatus (via_Id);
 }
 
+//reservas
+function todos_reservas(tabla){
+    return db.todos_reservas(tabla)
+}
+
 module.exports = {
     todos_usuario,
     un_usuario,
@@ -142,8 +147,9 @@ module.exports = {
     validar_Calificación,
     insertar_Calificación,
     todos_los_viajes,
-    registrar_viaje,
+    todos_reservas,
     reservar_viaje,
+    registrar_viaje,
     verificarExistenciaReserva,
     viajes_conductor,
     eliminar_viaje,
