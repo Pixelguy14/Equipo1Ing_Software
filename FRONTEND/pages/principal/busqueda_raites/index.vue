@@ -340,7 +340,7 @@ export default {
 
         if (viajeSeleccionado) {
           // Envía los datos al servidor, incluyendo el via_id
-          await axios.post('http://localhost:4000/api/reservas/', {
+          await axios.post('http://localhost:4000/api/viajes/reservarViaje/', {
             Res_Usu_NUA: this.usu_nua,
             Res_via_id: this.viajeId,
             Res_Num_Asientos: this.num_asientos 
@@ -356,6 +356,7 @@ export default {
         console.log('Error al realizar la reserva:', error)
       }
     },
+
     formatFecha (fecha) {
       const date = new Date(fecha)
       const day = ('0' + date.getDate()).slice(-2)
@@ -364,7 +365,20 @@ export default {
       const hours = ('0' + date.getHours()).slice(-2)
       const minutes = ('0' + date.getMinutes()).slice(-2)
       return `${day}/${month}/${year} ${hours}:${minutes}`
+    },
+
+    reservar (viaId) {
+      // eslint-disable-next-line no-console
+      console.log(viaId)
+      const url = 'http://localhost:4000/api/viajes/reservarViaje'
+      const sendData = {
+        Res_via_id: viaId, // Usamos el valor pasado como argumento
+        Res_Usu_NUA: localStorage.getItem('NUA'),
+        Res_Num_Asientos: 1
+      }
+      this.$axios.$post(url, sendData)
     }
+
   }
 }
 </script>

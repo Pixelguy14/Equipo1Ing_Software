@@ -8,7 +8,6 @@ const calificaciones = require ('./rutas/calificaciones')
 const historial = require ('./rutas/historial')
 const vehiculos = require('./rutas/vehiculos')
 const viajes = require('./rutas/viajes')
-const reservas = require('./rutas/reservas')
 
 const app = express() 
 
@@ -27,7 +26,6 @@ app.use('/api/usuarios', usuarios)
 app.use('/api/calificaciones', calificaciones)
 app.use('/api/historial', historial);
 app.use('/api/vehiculos', vehiculos);
-app.use('/api/reservas', reservas);
 
 //rutas para viajes
 app.use('/api/viajes', viajes);
