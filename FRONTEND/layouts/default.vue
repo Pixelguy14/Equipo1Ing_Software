@@ -1,12 +1,14 @@
 <template>
   <v-app app>
     <v-app-bar :clipped-left="clipped" fixed app elevation="0" class="bg-gradient">
-      <v-img
-        src="https://cdn-icons-png.flaticon.com/512/5509/5509636.png"
-        alt="Circular Image"
-        style="max-height: 40px; max-width: 40px;"
-      />
-      <v-toolbar-title style="color: white;" class="fuente">
+      <v-avatar>
+        <img
+          src="../static/logo.jpg"
+          alt="Circular Image"
+          style="border: 2px; max-height: 60px; max-width: 60px;"
+        >
+      </v-avatar>
+      <v-toolbar-title style="color: white; margin-left: 10px;" class="fuente">
         {{ title }}
       </v-toolbar-title>
       <v-spacer />
@@ -314,20 +316,26 @@ export default {
   },
   computed: {
     items () {
-      return [
+      const menuItems = [
         {
           title: 'Menú Principal',
           action: this.rutaMenu
-        },
-        {
-          title: 'Busqueda de viajes',
-          action: this.rutaBusqueda
         },
         {
           title: 'Historial',
           action: this.historialDialog
         }
       ]
+
+      // Si esConductor es falso, se añade el item de búsqueda de viajes
+      if (!this.esConductor) {
+        menuItems.splice(1, 0, {
+          title: 'Busqueda de viajes',
+          action: this.rutaBusqueda
+        })
+      }
+
+      return menuItems
     }
   },
   created () {
@@ -544,6 +552,7 @@ export default {
       localStorage.removeItem('NUA')
       this.$router.push('/')
     },
+
     goCrearViaje () {
       // extraer el NUA de la URL
       const NUA = this.$route.query.NUA
