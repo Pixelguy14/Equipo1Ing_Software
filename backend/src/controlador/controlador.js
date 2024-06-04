@@ -78,8 +78,15 @@ function eliminar_vehiculo(tabla,id){
 
 //Calificacion
 function un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA){
-    console.log('@@@ datos =>', tabla, Cal_Califica_Usu_NUA)
     return db.un_Usuario_Calificacion(tabla, Cal_Califica_Usu_NUA)
+}
+
+function validar_Calificación(Cal_Califica_Usu_NUA, Cal_Via_Id){
+    return db.validar_Calificación(Cal_Califica_Usu_NUA, Cal_Via_Id)
+}
+
+function insertar_Calificación(data){
+    return db.insertar_Calificación(data)
 }
 
 function todos_los_viajes(tabla){
@@ -89,7 +96,7 @@ function todos_los_viajes(tabla){
 function registrar_viaje(tabla, data){
     return db.registrar_viaje(tabla, data)
 }
-  
+
 
 function viajes_conductor(via_con_usu_NUA){
     return db.viajes_conductor(via_con_usu_NUA)
@@ -97,6 +104,14 @@ function viajes_conductor(via_con_usu_NUA){
 
 function eliminar_viaje(via_Id){
     return db.eliminar_viaje(via_Id)
+}
+
+function reservar_viaje(data){
+    return db.reservar_viaje(data)
+}
+
+function verificarExistenciaReserva(data){
+    return db.verificarExistenciaReserva(data)
 }
 
 //Historial
@@ -124,9 +139,12 @@ module.exports = {
     actualizar_vehiculo,
     eliminar_vehiculo,
     un_Usuario_Calificacion,
-    un_Usuario_Calificacion,
+    validar_Calificación,
+    insertar_Calificación,
     todos_los_viajes,
     registrar_viaje,
+    reservar_viaje,
+    verificarExistenciaReserva,
     viajes_conductor,
     eliminar_viaje,
     historialConductor,

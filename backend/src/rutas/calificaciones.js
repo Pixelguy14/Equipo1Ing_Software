@@ -7,7 +7,8 @@ const router= express.Router()
 
 router.get('/', todas_Calificaciones);
 router.get('/:Cal_Califica_Usu_NUA', un_Usuario_Calificacion);
-router.post('/',agregar);
+router.get('/validar/:Cal_Califica_Usu_NUA/:Cal_Via_Id', validar_Calificación)
+router.post('/',insertar_Calificación);
 
 async function todas_Calificaciones (req,res,next){
   try {
@@ -27,10 +28,19 @@ async function un_Usuario_Calificacion (req,res,next){
   }
 }
 
-async function agregar (req,res,next){
+async function insertar_Calificación (req,res,next){
   try {
-      const items= await controlador.agregar('calificaciones',req.body); 
-      respuestas.success(req, res, 'Agregado satisfactoriamente', 200)
+      const items= await controlador.insertar_Calificación(req.body); 
+      respuestas.success(req, res, items, 200)
+  } catch (err) {
+      next(err);
+  }
+}
+
+async function validar_Calificación (req,res,next){
+  try {
+      const items= await controlador.validar_Calificación(req.params.Cal_Califica_Usu_NUA, req.params.Cal_Via_Id); 
+      respuestas.success(req, res, items, 200)
   } catch (err) {
       next(err);
   }

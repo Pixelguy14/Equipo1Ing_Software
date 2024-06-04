@@ -7,6 +7,8 @@ const router= express.Router()
 
 router.get('/todos', todos_los_viajes);
 router.post('/registrarViaje', registrar_viaje);
+router.get('/reservarViaje', verificarExistenciaReserva);
+router.post('/reservarViaje', reservar_viaje);
 router.get('/:via_con_usu_NUA', viajes_conductor);
 router.delete('/:via_Id', eliminar_viaje);
 
@@ -40,6 +42,24 @@ async function viajes_conductor (req,res,next){
 async function eliminar_viaje (req,res,next){
   try {
       const items= await controlador.eliminar_viaje(req.params.via_Id);
+      respuestas.success(req, res, items, 200)
+  } catch (err) {
+      next(err);
+  }
+}
+
+async function reservar_viaje (req,res,next){
+  try {
+      const items= await controlador.reservar_viaje(req.body);
+      respuestas.success(req, res, items, 200)
+  } catch (err) {
+      next(err);
+  }
+}
+
+async function verificarExistenciaReserva (req,res,next){
+  try {
+      const items= await controlador.verificarExistenciaReserva(req.body);
       respuestas.success(req, res, items, 200)
   } catch (err) {
       next(err);

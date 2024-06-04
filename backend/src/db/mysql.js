@@ -113,14 +113,6 @@ function eliminar_vehiculo(tabla, Car_Usu_NUA) {
         })
     })}
 
-//inicio de sesion
-/*function iniciar_sesion(tabla, data) {
-    return new Promise((resolve, reject) => {
-        conexion.query(`SELECT * FROM ${tabla} WHERE Usu_Correo = ? AND Usu_Password = ?`, [data.Usu_Correo, data.Usu_Password], (error, result) => {
-            return error ? reject(error) : resolve(result);
-        })
-    })
-}*/
 
 // Calificacion
 function un_Usuario_Calificacion (tabla, Cal_Califica_Usu_NUA) {
@@ -128,8 +120,54 @@ function un_Usuario_Calificacion (tabla, Cal_Califica_Usu_NUA) {
         conexion.query(`SELECT * FROM ${tabla} WHERE Cal_Califica_Usu_NUA=${Cal_Califica_Usu_NUA}`, (error,result)=>{
             return error ? reject(error) : resolve(result);
         })
-    })}
+    })
+}
 
+function validar_Calificación(Cal_Califica_Usu_NUA, Cal_Via_Id) {
+    return new Promise((resolve, reject) => {
+        conexion.query(`
+        SELECT 
+            (SELECT COUNT(*) FROM calificaciones WHERE Cal_Califica_Usu_NUA = ${Cal_Califica_Usu_NUA} AND Cal_Via_Id = ${Cal_Via_Id}) AS cal_count,
+            (SELECT via_activo FROM viajes WHERE via_Id = ${Cal_Via_Id}) AS via_activo,
+            (SELECT COUNT(*) FROM reservas WHERE Res_Usu_NUA = ${Cal_Califica_Usu_NUA} AND Res_via_id = ${Cal_Via_Id}) AS res_count`, 
+        (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            const { cal_count, via_activo, res_count } = result[0];
+            resolve({ cal_count, via_activo, res_count });
+        });
+    });
+}
+
+async function insertar_Calificación(data) {
+    try {
+        const { cal_count, via_activo, res_count } = await validar_Calificación(data.Cal_Califica_Usu_NUA, data.Cal_Via_Id);
+        
+        if (cal_count > 0) {
+            return console.log("El usuario ya ha calificado este viaje.");
+        }
+        if (via_activo != 0) {
+            return console.log("El viaje aún no ha terminado.");
+        }
+        if (res_count == 0) {
+            return console.log("El usuario no tiene una reservación para este viaje.");
+        }
+        
+        conexion.query(`
+        INSERT INTO calificaciones (Cal_Califica_Usu_NUA, Cal_Via_Id, Cal_Calificado_Usu_NUA, Cal_Comentario, Cal_Calificacion)
+        VALUES (${data.Cal_Califica_Usu_NUA}, ${data.Cal_Via_Id}, ${data.Cal_Calificado_Usu_NUA}, '${data.Cal_Comentario}', ${data.Cal_Calificacion})`, 
+        (error, result) => {
+            if (error) {
+                return console.error("Error al insertar la calificación:", error);
+            }
+            console.log("Calificación insertada con éxito. =>", result);
+        });
+
+    } catch (error) {
+        console.error("Error al validar la calificación:", error);
+    }
+}
 
 // ====================== Viajes ======================
 function todos_los_viajes(tabla) {
@@ -140,6 +178,7 @@ function todos_los_viajes(tabla) {
         })
     })
 }
+
 function registrar_viaje(tabla, data) {
     return new Promise((resolve, reject) =>{
         conexion.query(`INSERT INTO ${tabla} SET ?`, data , (error,result)=>{
@@ -164,6 +203,46 @@ function eliminar_viaje(via_Id) {
             resolve(result);
         })
     })
+}
+
+async function reservar_viaje(data) {
+    try {
+        // Verificar si el usuario ya tiene una reserva para este viaje
+        const existeReserva = await verificarExistenciaReserva(data);
+        if (existeReserva) {
+            console.log("El usuario ya tiene una reserva para este viaje.");
+            return;
+        }
+        // Insertar la reserva en la base de datos
+        conexion.query(`
+            INSERT INTO reservas (Res_Usu_NUA, Res_via_id, Res_Num_Asientos)
+            VALUES (${data.Res_Usu_NUA}, ${data.Res_via_id}, ${data.Res_Num_Asientos})`, 
+            (error, result) => {
+                if (error) {
+                    console.error("Error al insertar la reserva:", error);
+                    return;
+                }
+                console.log("Reserva insertada con éxito. =>", result);
+            });
+
+    } catch (error) {
+        console.error("Error al insertar la reserva:", error);
+    }
+}
+
+function verificarExistenciaReserva(data) {
+    return new Promise((resolve, reject) => {
+        conexion.query(`
+            SELECT COUNT(*) AS count
+            FROM reservas
+            WHERE Res_Usu_NUA = ${data.Res_Usu_NUA} AND Res_via_id = ${data.Res_via_id}`, 
+            (error, result) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(result[0].count > 0);
+            });
+    });
 }
 
 // Historial
@@ -232,10 +311,14 @@ module.exports = {
     eliminar_vehiculo,
     /*iniciar_sesion,*/
     un_Usuario_Calificacion,
+    validar_Calificación,
+    insertar_Calificación,
     todos_los_viajes,
     registrar_viaje,
     viajes_conductor,
     eliminar_viaje,
+    reservar_viaje,
+    verificarExistenciaReserva,
     //Historial
     historialConductor,
     historialPasajero,

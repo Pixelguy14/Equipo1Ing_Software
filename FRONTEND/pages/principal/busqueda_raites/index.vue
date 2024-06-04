@@ -39,19 +39,18 @@
           <v-card class="raite">
             <v-col>
               <v-container>
-                <v-col>
+                <v-col style="color:white;">
                   <v-icon color="white">
                     mdi-account-group
                   </v-icon>
-                  <v-text-subtitle id="num-per-disponibles-raite" style="color: white;">
-                    {{ viaje.espacio_disponible }}
-                  </v-text-subtitle>
+                  {{ viaje.espacio_disponible }}
                   <v-icon color="white">
                     mdi-calendar-clock
                   </v-icon>
-                  <v-text-subtitle id="hora-fecha-raite" style="color: white">
-                    {{ formatFecha(viaje.fecha) }}
-                  </v-text-subtitle>
+                  {{ formatFecha(viaje.fecha) }}
+                  <v-btn color="primary" elevation="0" style="margin-left: 20px;" @click="reservar(viaje.via_id)">
+                    Reservar
+                  </v-btn>
                 </v-col>
               </v-container>
               <v-container class="raite-cont-title-price">
@@ -71,10 +70,8 @@
                       {{ viaje.destino }}
                     </v-card-title>
                   </v-col>
-                  <v-col cols="3" class="raite-con-precio">
-                    <v-text-subtitle class="raite-precio text-h4">
-                      {{ '$' + viaje.costo }}
-                    </v-text-subtitle>
+                  <v-col cols="3" class="raite-con-precio raite-precio text-h4">
+                    {{ '$' + viaje.costo }}
                   </v-col>
                 </v-row>
               </v-container>
@@ -82,10 +79,6 @@
           </v-card>
         </v-container>
       </v-container>
-      <!-- boton para pruebas -->
-      <!-- <v-btn @click="imprimirViajes">
-        Obtener raite
-      </v-btn> -->
     </v-col>
     <!-- seccion de card anuncios =============================== -->
     <v-col cols="6">
@@ -164,7 +157,7 @@ export default {
     filteredViajes () {
       return this.viajes.filter((viaje) => {
         return (!this.origen || viaje.origen === this.origen) &&
-               (!this.destino || viaje.destino === this.destino)
+              (!this.destino || viaje.destino === this.destino)
       })
     }
   },
@@ -185,7 +178,7 @@ export default {
 
         // iteramos sobre los datos y los agregamos al array de viajes
         for (let i = 0; i < body.length; i++) {
-          this.viajes.push({ via_id: body[i].via_id, nua_conductor: body[i].via_con_usu_NUA, costo: body[i].via_costo, origen: body[i].via_origen, destino: body[i].via_destino, espacio_disponible: body[i].via_esp_disp, fecha: body[i].via_fecha_hora, descripcion: body[i].via_lugares_pasada })
+          this.viajes.push({ via_id: body[i].via_Id, nua_conductor: body[i].via_con_usu_NUA, costo: body[i].via_costo, origen: body[i].via_origen, destino: body[i].via_destino, espacio_disponible: body[i].via_esp_disp, fecha: body[i].via_fecha_hora, descripcion: body[i].via_lugares_pasada })
           // eslint-disable-next-line no-console
           // console.log(body[i].via_fecha_hora)
         }
@@ -205,6 +198,7 @@ export default {
         console.log(viaje)
       })
     },
+
     formatFecha (fecha) {
       const date = new Date(fecha)
       const day = ('0' + date.getDate()).slice(-2)
@@ -213,7 +207,20 @@ export default {
       const hours = ('0' + date.getHours()).slice(-2)
       const minutes = ('0' + date.getMinutes()).slice(-2)
       return `${day}/${month}/${year} ${hours}:${minutes}`
+    },
+
+    reservar (viaId) {
+      // eslint-disable-next-line no-console
+      console.log(viaId)
+      const url = 'http://localhost:4000/api/viajes/reservarViaje'
+      const sendData = {
+        Res_via_id: viaId, // Usamos el valor pasado como argumento
+        Res_Usu_NUA: localStorage.getItem('NUA'),
+        Res_Num_Asientos: 1
+      }
+      this.$axios.$post(url, sendData)
     }
+
   }
 }
 </script>
