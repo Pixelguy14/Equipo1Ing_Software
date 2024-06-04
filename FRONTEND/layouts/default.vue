@@ -5,10 +5,10 @@
         <img
           src="../static/logo.jpg"
           alt="Circular Image"
-          style="border: 2px; max-height: 60px; max-width: 60px;"
+          style="border: 2px; max-height: 80px; max-width: 80px;"
         >
       </v-avatar>
-      <v-toolbar-title style="color: white; margin-left: 10px;" class="fuente">
+      <v-toolbar-title style="color: white; margin-left: 20px;" class="fuente">
         {{ title }}
       </v-toolbar-title>
       <v-spacer />
