@@ -362,7 +362,7 @@
           thumb-label
           ticks
           tick-size="5"
-          :max="5"
+          :max="10"
           label="calificación en estrellas"
           style="margin-left: 5%; margin-right: 5%;"
         />
@@ -789,7 +789,7 @@ export default {
       for (let i = 0; i < calification; i++) {
         stars.push('mdi-star')
       }
-      for (let i = calification; i < 5; i++) {
+      for (let i = calification; i < 10; i++) {
         stars.push('mdi-star-outline')
       }
       return stars
