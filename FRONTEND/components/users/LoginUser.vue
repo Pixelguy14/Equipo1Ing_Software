@@ -3,11 +3,11 @@
   <v-row class="d-flex justify-center">
     <v-card class="pa-6 rounded-xxl my-5" max-width="800">
       <v-avatar size="80" class="mx-auto d-flex justify-center">
-        <v-img
-          src="https://cdn-icons-png.flaticon.com/512/5509/5509636.png"
+        <img
+          src="../../static/logo.jpg"
           alt="Circular Image"
           style="border: 2px solid #343c61; max-height: 80px; max-width: 80px;"
-        />
+        >
       </v-avatar>
       <v-card-title class="headline d-flex justify-center">
         Inicia Sesion
