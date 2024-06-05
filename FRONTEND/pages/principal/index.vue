@@ -66,11 +66,18 @@ export default {
       calCount: 0,
       viaActivo: 0,
       resCount: 0,
-      dynamicParameter: null
+      dynamicParameter: null,
+      esConductor: false
     }
   },
   created () {
     this.validCalif() // Llamar al método para obtener los datos del usuario al crear el componente
+    this.fetchUserData() // Llamar al método para obtener los datos del usuario al crear el componente
+    const NUA = this.$route.query.NUA
+    this.$router.push({
+      path: '/principal/busqueda_raites',
+      query: { NUA }
+    })
   },
   methods: {
     validCalif () {
@@ -106,6 +113,25 @@ export default {
     cancelRating () {
       // Método para cancelar la calificación
       this.dialogRate = false
+    },
+    async fetchUserData () {
+      const storedNUA = localStorage.getItem('NUA')
+      if (storedNUA) {
+        try {
+          this.NUA = storedNUA
+          const apiUrl = `http://localhost:4000/api/usuarios/${this.NUA}`
+          const response = await axios.get(apiUrl)
+          const user = response.data.body
+          // Establecer esConductor según el valor de Usu_Tipo
+          this.esConductor = (user[0].Usu_Tipo === 'estudiante_con_vehiculo')
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Error al obtener datos del usuario:', error)
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('No se pudo recuperar el NUA del almacenamiento local')
+      }
     }
   }
 }
