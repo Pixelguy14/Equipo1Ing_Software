@@ -103,7 +103,7 @@ export default {
 
           // Redireccionar al usuario a la página principal
           this.$router.push({
-            path: '/principal/',
+            path: '/principal/busqueda_raites/',
             query: { NUA }
           })
         }

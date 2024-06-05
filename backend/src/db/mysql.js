@@ -147,7 +147,7 @@ async function insertar_Calificación(data) {
         if (cal_count > 0) {
             return console.log("El usuario ya ha calificado este viaje.");
         }
-        if (via_activo != 0) {
+        if (via_activo == 1) {
             return console.log("El viaje aún no ha terminado.");
         }
         if (res_count == 0) {
@@ -240,14 +240,32 @@ function historialConductor (Cal_Califica_Usu_NUA) {
 }
 
 //Reservar viajes
-function todos_reservas(tabla) {
-    return new Promise((resolve, reject) =>{
-        conexion.query(`SELECT * FROM ${tabla}`, (error,result)=>{
-            if(error) return reject(error);
+function todos_reservas() {
+    return new Promise((resolve, reject) => {
+        conexion.query(`
+            SELECT 
+                r.Res_Id AS ReservaID,
+                r.Res_Usu_NUA AS UsuarioNUA,
+                r.Res_Num_Asientos AS NumAsientos,
+                v.via_Id AS ViajeID,
+                v.via_fecha_hora AS FechaHora,
+                v.via_con_usu_NUA AS Conductor,
+                v.via_origen AS Origen,
+                v.via_destino AS Destino,
+                v.via_costo AS Costo,
+                v.via_activo AS Activo,
+                (SELECT COUNT(*) FROM calificaciones WHERE Cal_Califica_Usu_NUA = r.Res_Usu_NUA AND Cal_Via_Id = v.via_Id) AS TieneCalificacion
+            FROM 
+                reservas r
+            JOIN 
+                viajes v ON r.Res_via_id = v.via_Id;
+        `, (error, result) => {
+            if (error) return reject(error);
             resolve(result);
-        })
-    })
+        });
+    });
 }
+
 
 async function reservar_viaje(data) {
     try {

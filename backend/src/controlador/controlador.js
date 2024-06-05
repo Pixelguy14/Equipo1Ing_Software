@@ -86,6 +86,7 @@ function validar_Calificación(Cal_Califica_Usu_NUA, Cal_Via_Id){
 }
 
 function insertar_Calificación(data){
+    console.log(data)
     return db.insertar_Calificación(data)
 }
 
@@ -128,8 +129,8 @@ function actualizarViajeStatus (via_Id) {
 }
 
 //reservas
-function todos_reservas(tabla){
-    return db.todos_reservas(tabla)
+function todos_reservas(){
+    return db.todos_reservas()
 }
 
 module.exports = {

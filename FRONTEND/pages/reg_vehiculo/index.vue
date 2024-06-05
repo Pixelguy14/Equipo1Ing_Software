@@ -73,8 +73,6 @@
                 :rules="necesario"
                 maxlength="20"
                 label="Placas del Vehiculo"
-                :error-messages="ErrorSC"
-                @keydown="restrictSpecialCharacters"
               />
             </p>
           </v-card-text>
