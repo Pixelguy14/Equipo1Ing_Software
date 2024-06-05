@@ -333,6 +333,11 @@ export default {
           title: 'Busqueda de viajes',
           action: this.rutaBusqueda
         })
+      } else if (this.esConductor) {
+        menuItems.splice(1, 0, {
+          title: 'Busqueda de viajes',
+          action: this.rutaBusqueda
+        })
       }
 
       return menuItems
