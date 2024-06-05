@@ -244,7 +244,7 @@ export default {
         this.email = respuesta.data.body[0].Usu_Correo
         this.ape_pat = respuesta.data.body[0].Usu_Apellido_Paterno
         this.ape_mat = respuesta.data.body[0].Usu_Apellido_Materno
-        this.password = respuesta.data.body[0].Usu_Password
+        // this.password = respuesta.data.body[0].Usu_Password
         this.usu_tipo = respuesta.data.body[0].Usu_Tipo
         if (this.usu_tipo === 'estudiante_con_vehiculo') {
           this.isToggleOn = true
@@ -300,6 +300,7 @@ export default {
             Usu_Tipo: this.usu_tipo
           }
         )
+        location.reload()
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err)
