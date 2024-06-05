@@ -30,13 +30,13 @@
           </v-sheet>
         </v-container>
         <!-- Viajes disponibles -->
-        <v-card-title class="title-busqueda" style="color: #717171;">
+        <v-card-title class="title-busqueda fuente" style="color: #717171;">
           viajes disponibles
         </v-card-title>
         <!-- Filtros -->
         <v-container>
           <!-- Lugares de origen y destino -->
-          <v-row>
+          <v-row class="fuente">
             <v-col cols="6">
               <v-select
                 v-model="origen"
@@ -63,20 +63,19 @@
               <v-btn
                 height="40"
                 min-width="100"
-                class="btn-filter"
+                class="btn-filter fuente"
                 :color="fechaFiltro === 'hoy' ? 'primary' : undefined"
                 @click="setFechaFiltro('hoy')"
               >
                 Hoy
               </v-btn>
             </v-col>
-
             <v-col cols="auto">
               <v-btn
                 :ripple="false"
                 height="40"
                 min-width="100"
-                class="btn-filter"
+                class="btn-filter fuente"
                 :color="fechaFiltro === 'mañana' ? 'primary' : undefined"
                 @click="setFechaFiltro('mañana')"
               >
@@ -84,6 +83,13 @@
               </v-btn>
             </v-col>
           </v-row>
+        </v-container>
+        <v-container v-if="viajes.length < 1">
+          <v-card elevation="0" class="mx-auto fuente" style="display: flex; justify-content: center;">
+            <v-card-title style="font-weight: bold; font-size: xx-large;">
+              No Hay raites
+            </v-card-title>
+          </v-card>
         </v-container>
         <!-- Contenedor de scroll -->
         <v-container class="cards-scroll">
@@ -160,16 +166,23 @@
             <v-container>
               <v-row>
                 <v-col cols="12">
-                  <v-text-field v-model="usu_nua" label="Tu NUA" max-length="6" readonly required outlined />
+                  <v-text-field
+                    v-model="usu_nua"
+                    label="Tu NUA"
+                    max-length="6"
+                    readonly
+                    required
+                    outlined
+                  />
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field 
-                    type="number" 
-                    v-model="num_asientos" 
-                    :label="`Cantidad de asientos (Max: ${maxAsientos})`" 
-                    :rules="[asientosRule]" 
-                    required 
-                    outlined 
+                  <v-text-field
+                    v-model="num_asientos"
+                    type="number"
+                    :label="`Cantidad de asientos (Max: ${maxAsientos})`"
+                    :rules="[asientosRule]"
+                    required
+                    outlined
                   />
                 </v-col>
               </v-row>
@@ -177,14 +190,13 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn :disabled="!formValid" color="primary" @click="agregar_reservas">
             Reservar
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
 
     <!-- Nuevo diálogo de viaje reservado -->
     <v-dialog v-model="mostrarDialogoReservado" max-width="400">
@@ -196,7 +208,7 @@
           Tu viaje ha sido reservado con éxito.
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn color="primary" @click="mostrarDialogoReservado = false">
             Cerrar
           </v-btn>
@@ -217,60 +229,60 @@ export default {
       destino: null,
       fechaFiltro: null,
       municipios: [
-        { "nombre": "DICIS" },
-        { "nombre": "Abasolo" },
-        { "nombre": "Acámbaro" },
-        { "nombre": "Apaseo el Alto" },
-        { "nombre": "Apaseo el Grande" },
-        { "nombre": "Atarjea" },
-        { "nombre": "Celaya" },
-        { "nombre": "Comonfort" },
-        { "nombre": "Coroneo" },
-        { "nombre": "Cortazar" },
-        { "nombre": "Cuerámaro" },
-        { "nombre": "Doctor Mora" },
-        { "nombre": "Dolores Hidalgo Cuna de la Independencia Nacional" },
-        { "nombre": "Guanajuato" },
-        { "nombre": "Huanímaro" },
-        { "nombre": "Irapuato" },
-        { "nombre": "Jaral del Progreso" },
-        { "nombre": "Jerécuaro" },
-        { "nombre": "León" },
-        { "nombre": "Manuel Doblado" },
-        { "nombre": "Moroleón" },
-        { "nombre": "Ocampo" },
-        { "nombre": "Pénjamo" },
-        { "nombre": "Pueblo Nuevo" },
-        { "nombre": "Purísima del Rincón" },
-        { "nombre": "Romita" },
-        { "nombre": "Salamanca" },
-        { "nombre": "Salvatierra" },
-        { "nombre": "San Diego de la Unión" },
-        { "nombre": "San Felipe" },
-        { "nombre": "San Francisco del Rincón" },
-        { "nombre": "San José Iturbide" },
-        { "nombre": "San Luis de la Paz" },
-        { "nombre": "San Miguel de Allende" },
-        { "nombre": "Santa Catarina" },
-        { "nombre": "Santa Cruz de Juventino Rosas" },
-        { "nombre": "Santiago Maravatío" },
-        { "nombre": "Silao de la Victoria" },
-        { "nombre": "Tarandacuao" },
-        { "nombre": "Tarimoro" },
-        { "nombre": "Tierra Blanca" },
-        { "nombre": "Uriangato" },
-        { "nombre": "Valle de Santiago" },
-        { "nombre": "Victoria" },
-        { "nombre": "Villagrán" },
-        { "nombre": "Xichú" },
-        { "nombre": "Yuriria" }
+        { nombre: 'DICIS' },
+        { nombre: 'Abasolo' },
+        { nombre: 'Acámbaro' },
+        { nombre: 'Apaseo el Alto' },
+        { nombre: 'Apaseo el Grande' },
+        { nombre: 'Atarjea' },
+        { nombre: 'Celaya' },
+        { nombre: 'Comonfort' },
+        { nombre: 'Coroneo' },
+        { nombre: 'Cortazar' },
+        { nombre: 'Cuerámaro' },
+        { nombre: 'Doctor Mora' },
+        { nombre: 'Dolores Hidalgo Cuna de la Independencia Nacional' },
+        { nombre: 'Guanajuato' },
+        { nombre: 'Huanímaro' },
+        { nombre: 'Irapuato' },
+        { nombre: 'Jaral del Progreso' },
+        { nombre: 'Jerécuaro' },
+        { nombre: 'León' },
+        { nombre: 'Manuel Doblado' },
+        { nombre: 'Moroleón' },
+        { nombre: 'Ocampo' },
+        { nombre: 'Pénjamo' },
+        { nombre: 'Pueblo Nuevo' },
+        { nombre: 'Purísima del Rincón' },
+        { nombre: 'Romita' },
+        { nombre: 'Salamanca' },
+        { nombre: 'Salvatierra' },
+        { nombre: 'San Diego de la Unión' },
+        { nombre: 'San Felipe' },
+        { nombre: 'San Francisco del Rincón' },
+        { nombre: 'San José Iturbide' },
+        { nombre: 'San Luis de la Paz' },
+        { nombre: 'San Miguel de Allende' },
+        { nombre: 'Santa Catarina' },
+        { nombre: 'Santa Cruz de Juventino Rosas' },
+        { nombre: 'Santiago Maravatío' },
+        { nombre: 'Silao de la Victoria' },
+        { nombre: 'Tarandacuao' },
+        { nombre: 'Tarimoro' },
+        { nombre: 'Tierra Blanca' },
+        { nombre: 'Uriangato' },
+        { nombre: 'Valle de Santiago' },
+        { nombre: 'Victoria' },
+        { nombre: 'Villagrán' },
+        { nombre: 'Xichú' },
+        { nombre: 'Yuriria' }
       ],
       mostrarVentanaReserva: false,
       mostrarDialogoReservado: false, // Nueva variable de estado
       usu_nua: this.$route.query.NUA,
       num_asientos: '',
       viajeId: null,
-      formValid: false, //variable para controlar la validación del formulario
+      formValid: false // variable para controlar la validación del formulario
     }
   },
   computed: {
@@ -286,15 +298,15 @@ export default {
           : this.fechaFiltro === 'mañana' ? manana.toDateString() === fechaViaje.toDateString() : true
 
         return (!this.origen || viaje.origen === this.origen) &&
-               (!this.destino || viaje.destino === this.destino) &&
-               filtroFecha
+              (!this.destino || viaje.destino === this.destino) &&
+              filtroFecha
       })
     },
-    maxAsientos() {
+    maxAsientos () {
       const viajeSeleccionado = this.viajes.find(viaje => viaje.via_id === this.viajeId)
       return viajeSeleccionado ? viajeSeleccionado.espacio_disponible : 0
     },
-    asientosRule() {
+    asientosRule () {
       return value => (value <= this.maxAsientos && value > 0) || `Máximo ${this.maxAsientos} asientos disponibles`
     }
   },
@@ -308,16 +320,18 @@ export default {
     async get_raites () {
       try {
         const response = await axios.get('http://localhost:4000/api/viajes/todos')
-        const body = response.data.body
+        const body = response.data.body.filter(item => item.via_activo === 1)
 
         for (let i = 0; i < body.length; i++) {
           this.viajes.push({ via_id: body[i].via_Id, nua_conductor: body[i].via_con_usu_NUA, costo: body[i].via_costo, origen: body[i].via_origen, destino: body[i].via_destino, espacio_disponible: body[i].via_esp_disp, fecha: body[i].via_fecha_hora, descripcion: body[i].via_lugares_pasada })
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log(error)
       }
     },
-    async VentanaReservas(viajeId) {
+    // eslint-disable-next-line require-await
+    async VentanaReservas (viajeId) {
       try {
         this.viajeId = viajeId
         this.mostrarVentanaReserva = true
@@ -325,34 +339,38 @@ export default {
         // Optional: You can fetch the trip details again if necessary
         const viajeSeleccionado = this.viajes.find(viaje => viaje.via_id === viajeId)
         if (viajeSeleccionado) {
+          // eslint-disable-next-line no-console
           console.log('Viaje seleccionado:', viajeSeleccionado)
         } else {
+          // eslint-disable-next-line no-console
           console.log('No se encontró el viaje con el ID:', viajeId)
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log('Error al abrir la ventana de reservas:', error)
       }
     },
-    async agregar_reservas() {
+    async agregar_reservas () {
       try {
         const viajeSeleccionado = this.viajes.find(viaje => viaje.via_id === this.viajeId)
-        
 
         if (viajeSeleccionado) {
           // Envía los datos al servidor, incluyendo el via_id
           await axios.post('http://localhost:4000/api/viajes/reservarViaje/', {
             Res_Usu_NUA: this.usu_nua,
             Res_via_id: this.viajeId,
-            Res_Num_Asientos: this.num_asientos 
+            Res_Num_Asientos: this.num_asientos
           })
 
           // Cierra el diálogo de reserva y abre el nuevo diálogo
           this.mostrarVentanaReserva = false
           this.mostrarDialogoReservado = true
         } else {
+          // eslint-disable-next-line no-console
           console.log('No se encontró el viaje con el ID:', this.viajeId)
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log('Error al realizar la reserva:', error)
       }
     },

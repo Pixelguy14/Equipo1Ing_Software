@@ -96,9 +96,16 @@
           </v-toolbar-title>
           <v-spacer />
         </v-app-bar>
+        <v-card-title
+          v-if="viajesItemsConductor < 1 && historialItemsConductor <1 && historialItemsPasajero < 1 && viajesItemsPasajero <1"
+          style=" display: flex; justify-content: center; padding-top: 20%; font-size: xx-large; font-weight: bold;"
+          class="fuente"
+        >
+          No hay ningún viaje en el historial actualmente
+        </v-card-title>
         <!--Tabla para Conductores (Cambiar status de viajes)-->
         <v-data-table
-          v-if="esConductor==true"
+          v-if="esConductor==true && viajesItemsConductor.length > 0"
           elevation="0"
           :headers="headersConductorViajes"
           :items="viajesItemsConductor"
@@ -144,10 +151,63 @@
             </v-row>
           </template>
         </v-data-table>
-
+        <!--Tabla para Conductores (Viajes terminados)-->
+        <v-data-table
+          v-if="esConductor==true && viajesTerminadosItemsConductor.length > 0"
+          elevation="0"
+          :headers="headersConductorViajesTerminados"
+          :items="viajesTerminadosItemsConductor"
+          :items-per-page="3"
+          class="fuente"
+          style="max-width: 100% !important;"
+        >
+          <template #top>
+            <v-toolbar flat>
+              <v-toolbar-title class="fuente">
+                Viajes concluidos
+              </v-toolbar-title>
+            </v-toolbar>
+          </template>
+          <template #[`item.acciones`]="{ item }">
+            <v-row>
+              <v-col cols="6">
+                <v-tooltip top color="success">
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      color="success"
+                      v-bind="attrs"
+                      @click="cambiarStatusViaje(item.via_Id)"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-list-status</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Concluir viaje</span>
+                </v-tooltip>
+              </v-col>
+              <v-col cols="6">
+                <v-tooltip top color="error">
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      color="error"
+                      v-bind="attrs"
+                      @click="eliminarViaje(item)"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Cancelar viaje</span>
+                </v-tooltip>
+              </v-col>
+            </v-row>
+          </template>
+        </v-data-table>
         <!--Tabla para Conductores (Calificaciones)-->
         <v-data-table
-          v-if="esConductor==true"
+          v-if="esConductor==true && historialItemsConductor.length > 0"
           able
           elevation="0"
           :headers="headersConductor"
@@ -155,7 +215,7 @@
           :items-per-page="5"
           class="fuente"
           hide-default-footer
-          style="margin-top: 20px; max-width: 100% !important;"
+          style="max-width: 100% !important;"
         >
           <template #top>
             <v-toolbar flat>
@@ -170,9 +230,48 @@
             </v-icon>
           </template>
         </v-data-table>
-        <!--Tabla para Pasajeros-->
+
+        <!--Tabla para pasajeros (viajes + calificar)-->
         <v-data-table
-          v-if="esConductor==false"
+          v-if="esConductor==false && viajesItemsPasajero.length > 0"
+          able
+          elevation="0"
+          :headers="headersPasajeroPendiente"
+          :items="viajesItemsPasajero"
+          :items-per-page="5"
+          hide-default-footer
+          class="fuente"
+          style="padding-top: 5%; max-width: 100% !important;"
+        >
+          <template #top>
+            <v-toolbar flat>
+              <v-toolbar-title class="fuente">
+                Viajes sin calificar
+              </v-toolbar-title>
+            </v-toolbar>
+          </template>
+          <template #[`item.acciones`]="{ item }">
+            <v-row>
+              <v-tooltip top color="warning">
+                <template #activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    color="warning"
+                    v-bind="attrs"
+                    @click="calificar(item)"
+                    v-on="on"
+                  >
+                    <v-icon>mdi-list-status</v-icon>
+                  </v-btn>
+                </template>
+                <span>calificar viaje</span>
+              </v-tooltip>
+            </v-row>
+          </template>
+        </v-data-table>
+        <!--Tabla para Pasajeros (calificaciones)-->
+        <v-data-table
+          v-if="esConductor==false && historialItemsPasajero.length > 0"
           able
           elevation="0"
           :headers="headersPasajero"
@@ -183,7 +282,11 @@
           style="max-width: 100% !important;"
         >
           <template #top>
-            <v-toolbar flat />
+            <v-toolbar flat>
+              <v-toolbar-title class="fuente">
+                Calificaciones
+              </v-toolbar-title>
+            </v-toolbar>
           </template>
           <template #[`item.Cal_Calificacion`]="{ item }">
             <v-icon v-for="(star, index) in getCalificationStars(item.Cal_Calificacion)" :key="index">
@@ -243,6 +346,37 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="dialogRate" width="500px">
+      <v-card width="500px">
+        <v-card-title>Califica el viaje</v-card-title>
+        <v-row style="margin-left: 4%; margin-right: 4%;">
+          <v-text-field v-model="idViaje" label="ID del viaje" readonly disabled />
+        </v-row>
+        <v-row style="margin-left: 4%; margin-right: 4%;">
+          <v-text-field v-model="conductorNUA" label="Nua del conductor" readonly disabled />
+        </v-row>
+        <v-textarea v-model="comments" label="comentarios" style="margin-left: 4%; margin-right: 4%;" />
+        <v-slider
+          v-model="stars"
+          step="1"
+          thumb-label
+          ticks
+          tick-size="5"
+          :max="5"
+          label="calificación en estrellas"
+          style="margin-left: 5%; margin-right: 5%;"
+        />
+        <v-card-actions>
+          <v-btn color="success" @click="saveRating()">
+            Guardar
+          </v-btn>
+          <v-spacer />
+          <v-btn color="error" @click="dialogRate = false">
+            Cancelar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="cardCierraSesión" max-width="35%">
       <v-card>
         <h2 class="d-flex justify-center fuente">
@@ -289,6 +423,12 @@ export default {
         { text: 'Precio', align: 'left', sortable: true, value: 'via_costo' },
         { text: 'Acciones', align: 'center', sortable: false, value: 'acciones' }
       ],
+      headersConductorViajesTerminados: [
+        { text: 'Fecha', align: 'left', sortable: true, value: 'via_fecha_hora' },
+        { text: 'Origen', align: 'left', sortable: true, value: 'via_origen' },
+        { text: 'Destino', align: 'left', sortable: true, value: 'via_destino' },
+        { text: 'Precio', align: 'left', sortable: true, value: 'via_costo' }
+      ],
       headersPasajero: [
         { text: 'Fecha', align: 'left', sortable: true, value: 'via_fecha_hora' },
         { text: 'NUA de conductor', align: 'left', sortable: true, value: 'Cal_Calificado_Usu_NUA' },
@@ -297,9 +437,21 @@ export default {
         { text: 'Precio', align: 'left', sortable: true, value: 'via_costo' },
         { text: 'Calificación', align: 'left', sortable: false, value: 'Cal_Calificacion' }
       ],
+      headersPasajeroPendiente: [
+        { text: 'ID del viaje', align: 'left', sortable: true, value: 'ViajeID' },
+        { text: 'NUA del conductor', align: 'left', sortable: true, value: 'Conductor' },
+        { text: 'Asientos', align: 'left', sortable: true, value: 'NumAsientos' },
+        { text: 'Origen', align: 'left', sortable: true, value: 'Origen' },
+        { text: 'Destino', align: 'left', sortable: true, value: 'Destino' },
+        { text: 'Precio', align: 'left', sortable: true, value: 'Costo' },
+        { text: 'Activo', align: 'left', sortable: true, value: 'activo' },
+        { text: 'Acciones', align: 'left', sortable: false, value: 'acciones' }
+      ],
       historialItemsConductor: [],
       viajesItemsConductor: [],
+      viajesTerminadosItemsConductor: [],
       historialItemsPasajero: [],
+      viajesItemsPasajero: [],
       miniVariant: false,
       right: true,
       rightDrawer: false,
@@ -311,7 +463,13 @@ export default {
       showUpdate: false,
       paraActualizarViaje: null,
       esConductor: false,
-      conductor: Boolean
+      conductor: Boolean,
+      idViaje: null,
+      dialogRate: false,
+      comments: null,
+      stars: null,
+      conductorNUA: null,
+      state: null
     }
   },
   computed: {
@@ -319,7 +477,7 @@ export default {
       const menuItems = [
         {
           title: 'Menú Principal',
-          action: this.rutaMenu
+          action: this.rutaBusqueda
         },
         {
           title: 'Historial',
@@ -356,8 +514,10 @@ export default {
         if (this.esConductor === true) {
           this.fetchHistorialDataConductor()
           this.fetchViajesDataConductor()
+          this.fetchViajesTerminadosDataConductor()
         } else {
           this.fetchHistorialDataPasajero()
+          this.fetchViajesDataPasajero()
         }
         this.abrirHistorial = true
       } else if (item.title === 'Menú Principal') {
@@ -452,6 +612,30 @@ export default {
       }
     },
 
+    async fetchViajesTerminadosDataConductor () {
+      const storedNUA = localStorage.getItem('NUA')
+
+      if (storedNUA) {
+        try {
+          this.NUA = storedNUA
+          const apiUrl = `http://localhost:4000/api/viajes/${this.NUA}`
+          const response = await axios.get(apiUrl)
+          this.viajesTerminadosItemsConductor = response.data.body
+            .filter(item => item.via_activo === 0)
+            .map(item => ({
+              ...item,
+              via_fecha_hora: new Date(item.via_fecha_hora).toLocaleDateString()
+            }))
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Error al obtener datos del historial:', error)
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('No se pudo recuperar el NUA del almacenamiento local')
+      }
+    },
+
     async fetchHistorialDataConductor () {
       const storedNUA = localStorage.getItem('NUA')
 
@@ -498,6 +682,53 @@ export default {
       }
     },
 
+    async fetchViajesDataPasajero () {
+      const storedNUA = localStorage.getItem('NUA')
+
+      if (storedNUA) {
+        try {
+          this.NUA = storedNUA
+          const apiUrl = 'http://localhost:4000/api/viajes/reservas'
+          const response = await axios.get(apiUrl)
+
+          // Imprimir los datos recibidos de la API para verificar su estructura
+          // eslint-disable-next-line no-console
+          console.log('Datos recibidos:', response.data.body)
+
+          // Filtrar los viajes para que solo queden aquellos cuyo Res_Usu_NUA coincide con el storedNUA,
+          // item.activo es igual a 0 y TieneCalificacion es igual a 0
+          this.viajesItemsPasajero = response.data.body
+            .filter((item) => {
+              // eslint-disable-next-line no-console
+              console.log('Comparando:', {
+                UsuarioNUA: item.UsuarioNUA,
+                storedNUA,
+                Activo: item.Activo,
+                TieneCalificacion: item.TieneCalificacion
+              })
+              return (
+                item.UsuarioNUA.toString() === storedNUA.toString() &&
+            item.Activo === 0 &&
+            item.TieneCalificacion === 0
+              )
+            })
+            .map(item => ({
+              ...item
+            }))
+
+          // Imprimir los datos después del filtrado para verificar el resultado
+          // eslint-disable-next-line no-console
+          console.log('Datos después del filtrado:', this.viajesItemsPasajero)
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Error al obtener datos del historial:', error)
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('No se pudo recuperar el NUA del almacenamiento local')
+      }
+    },
+
     async fetchUserData () {
       const storedNUA = localStorage.getItem('NUA')
       if (storedNUA) {
@@ -516,6 +747,41 @@ export default {
         // eslint-disable-next-line no-console
         console.error('No se pudo recuperar el NUA del almacenamiento local')
       }
+    },
+
+    calificar (item) {
+      this.idViaje = item.ViajeID
+      this.conductorNUA = item.Conductor
+      this.state = item.activo
+      this.dialogRate = true
+    },
+
+    saveRating () {
+      const sendData = {
+        Cal_Calificado_Usu_NUA: this.conductorNUA,
+        Cal_Califica_Usu_NUA: localStorage.getItem('NUA'),
+        Cal_Comentario: this.comments,
+        Cal_Calificacion: this.stars,
+        Cal_Via_Id: this.idViaje
+      }
+      // eslint-disable-next-line no-console
+      console.log(sendData)
+
+      const url = 'http://localhost:4000/api/calificaciones/'
+      this.$axios.post(url, sendData)
+        .then((res) => {
+          // eslint-disable-next-line no-console
+          console.log('@@ res =>', res)
+          this.fetchHistorialDataPasajero()
+          this.fetchViajesDataPasajero()
+          this.dialogRate = false
+          this.comments = null
+          this.stars = null
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log('@@ err =>', err)
+        })
     },
 
     getCalificationStars (calification) {
@@ -540,7 +806,7 @@ export default {
     rutaMenu () {
       const NUA = this.$route.query.NUA
       this.$router.push({
-        path: '/principal/',
+        path: '/principal/busqueda_raites/',
         query: { NUA }
       })
     },
